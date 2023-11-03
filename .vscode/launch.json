@@ -1,0 +1,689 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "bme280",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/bme280/bme280",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+        },
+		{
+			"name": "bme280_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/bme280/bme280_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "emc2101",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/emc2101/emc2101",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "emc2101_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/emc2101/emc2101_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "tlv493d",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/tlv493d/tlv493d",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "tlv493d_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/tlv493d/tlv493d_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neokey1x4",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neokey1x4",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neokey1x4_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neokey1x4_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neoslider",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neoslider",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neoslider_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neoslider_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neorotary",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neorotary",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neorotary_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neorotary_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neorotary1x4",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neorotary1x4",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "neorotary1x4_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/adafruit/neorotary1x4_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "scan_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/mcp2221a/scan_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "ssd1306",
+			"type": "cppdbg",
+			"request": "launch",
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            },
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/ssd1306/ssd1306",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": []
+		},
+		{
+			"name": "pisugar3",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/pisugar3/pisugar3",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+             "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+        {
+			"name": "lc709203f",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/lc709203f/lc709203f",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+        }
+	]
+}

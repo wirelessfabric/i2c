@@ -1,0 +1,148 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## MCP2221A - Microchip USB to I2C Host Protocol Bridge
+#######################################################################
+##
+## Adafruit MCP2221A Breakout - General Purpose USB to GPIO ADC I2C 
+## See: https://www.adafruit.com/product/4471
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/linux
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/post-install-checks
+##
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/20005565B.pdf
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/mcp2221_0_1.tar.gz
+##
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-generic.c
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-mcp2221.c
+##
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-generic.c
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-mcp2221.c
+##
+## See: https://libusb.info/
+## See: https://github.com/libusb/libusb.git
+## See: https://github.com/libusb/hidapi.git
+## See: https://github.com/gregkh/usbutils.git
+## See: https://github.com/todbot/hidapitester.git
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+$ sudo apt install libusb-dev libhidapi-dev
+$ sudo apt install libudev-dev
+
+$ sudo vi /etc/udev/rules.d/99-mcp2221.rules
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04d8", ATTR{idProduct}=="00dd", MODE="0666"
+
+$ uname -a
+Linux soho 5.15.0-86-generic #96-Ubuntu SMP Wed Sep 20 08:23:49 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            11Gi       2.5Gi       5.6Gi        55Mi       3.5Gi       8.7Gi
+Swap:          1.0Gi          0B       1.0Gi
+
+####################################################################
+## remove and blackist native hid_mcp2221, if exists
+####################################################################
+
+$ sudo lsmod | grep hid_mcp2221
+$ sudo rmmod hid_mcp2221
+$ sudo vi /etc/modprobe.d/blacklist.conf
+:::
+blacklist hid_mcp2221
+$ sudo update-initramfs -u
+
+####################################################################
+## libusb hidapi
+####################################################################
+
+$ sudo apt install libudev-dev
+
+$ sudo vi /etc/udev/rules.d/99-mcp2221.rules
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04d8", ATTR{idProduct}=="00dd", MODE="0666"
+
+$ sudo pip3 install hidapi
+
+$ sudo pip3 install adafruit-blinka
+
+$ export BLINKA_MCP2221=1
+
+$ python3
+Python 3.9.2 (default, Mar 12 2021, 04:06:34) 
+[GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import hid
+>>> hid.enumerate()
+[{'path': b'1-1.1:1.2', 'vendor_id': 1240, 'product_id': 221, 'serial_number': '', 'release_number': 256, 'manufacturer_string': '', 'product_string': '', 'usage_page': 0, 'usage': 0, 'interface_number': 2}]
+>>> 
+
+## attach USB cable
+
+$ lsusb
+:::
+Bus 003 Device 013: ID 04d8:00dd Microchip Technology, Inc. MCP2221 USB-I2C/UART Combo
+:::
+
+$ dmesg | grep usb
+:::
+[ 2168.327111] usb 3-2.2: new full-speed USB device number 13 using xhci_hcd
+[ 2168.431218] usb 3-2.2: New USB device found, idVendor=04d8, idProduct=00dd, bcdDevice= 1.00
+[ 2168.431224] usb 3-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 2168.431226] usb 3-2.2: Product: MCP2221 USB-I2C/UART Combo
+[ 2168.431228] usb 3-2.2: Manufacturer: Microchip Technology Inc.
+[ 2168.444468] hid-generic 0003:04D8:00DD.0007: hiddev1,hidraw3: USB HID v1.11 Device [Microchip Technology Inc. MCP2221 USB-I2C/UART Combo] on usb-0000:00:14.0-2.2/input2
+[ 2168.477305] usbcore: registered new interface driver cdc_acm
+
+$ python3
+Python 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+
+>>> import hid
+
+>>> hid.enumerate()
+[{'path': b'1-1.1:1.2', 'vendor_id': 1240, 'product_id': 221, 'serial_number': '', 'release_number': 256, 'manufacturer_string': 'Microchip Technology Inc.', 'product_string': 'MCP2221 USB-I2C/UART Combo', 'usage_page': 0, 'usage': 0, 'interface_number': 2}]
+
+>>> device = hid.device()
+>>> device.open(0x04D8, 0x00DD)
+
+>>> import os
+>>> os.environ["BLINKA_MCP2221"]
+'1'
+
+####################################################################
+## Adafruit CircuitPython Blinka
+####################################################################
+
+## See: rpi4-circuitpython-blinka-notes.txt
+
+#######################################################################
+## scan_i2c_hid
+#######################################################################
+
+$ mcp2221a/scan_i2c_hid 
+i2c_scan(0x0c): ACK
+i2c_scan(0x4c): ACK
+
+####################################################################
+## emc2101_i2c_hid
+####################################################################
+
+$ emc2101/emc2101_i2c_hid 
+External Temperature: Diode Fault (Open Condition)
+Internal Temperature:  21.00 C
+
+External Temperature: Diode Fault (Open Condition)
+Internal Temperature:  21.00 C
+
+^C

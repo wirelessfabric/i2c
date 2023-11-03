@@ -1,0 +1,97 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## EMC2101 Fan Controller and Temperature Sensor
+#######################################################################
+##
+## Adafruit EMC2101 I2C PC Fan Controller and Temperature Sensor
+## See: https://www.adafruit.com/product/4808
+## See: https://learn.adafruit.com/emc2101-fan-controller-and-temperature-sensor
+## See: https://github.com/adafruit/Adafruit_EMC2101
+## See: https://github.com/adafruit/Adafruit_CircuitPython_EMC2101
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/2101.pdf
+##
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ uname -a
+Linux soho 5.15.0-86-generic #96-Ubuntu SMP Wed Sep 20 08:23:49 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            11Gi       2.5Gi       5.6Gi        55Mi       3.5Gi       8.7Gi
+Swap:          1.0Gi          0B       1.0Gi
+
+####################################################################
+## emc2101_i2c_hid
+####################################################################
+
+$ emc2101/emc2101_i2c_hid 
+External Temperature: Diode Fault (Open Condition)
+Internal Temperature:  21.00 C
+
+External Temperature: Diode Fault (Open Condition)
+Internal Temperature:  21.00 C
+
+^C
+
+####################################################################
+## Adafruit CircuitPython Blinka
+####################################################################
+
+## See: rpi4-circuitpython-blinka-notes.txt
+
+####################################################################
+## Adafruit CircuitPython library for Adafruit EMC2101
+## See: https://github.com/adafruit/Adafruit_CircuitPython_EMC2101
+####################################################################
+
+$ sudo pip3 install adafruit-circuitpython-emc2101
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: adafruit-circuitpython-emc2101 in /usr/local/lib/python3.9/dist-packages (1.2.2)
+Requirement already satisfied: Adafruit-Blinka in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-emc2101) (8.20.0)
+Requirement already satisfied: adafruit-circuitpython-busdevice in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-emc2101) (5.2.6)
+Requirement already satisfied: adafruit-circuitpython-register in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-emc2101) (1.9.16)
+Requirement already satisfied: sysv-ipc>=1.1.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (1.1.0)
+Requirement already satisfied: Adafruit-PureIO>=1.1.7 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (1.1.11)
+Requirement already satisfied: Adafruit-PlatformDetect>=3.13.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (3.47.0)
+Requirement already satisfied: RPi.GPIO in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (0.7.1)
+Requirement already satisfied: pyftdi>=0.40.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (0.54.0)
+Requirement already satisfied: adafruit-circuitpython-typing in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (1.9.4)
+Requirement already satisfied: rpi-ws281x>=4.0.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-emc2101) (5.0.0)
+Requirement already satisfied: pyusb!=1.2.0,>=1.0.0 in /usr/local/lib/python3.9/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-emc2101) (1.2.1)
+Requirement already satisfied: pyserial>=3.0 in /usr/lib/python3/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-emc2101) (3.5b0)
+Requirement already satisfied: typing-extensions~=4.0 in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-register->adafruit-circuitpython-emc2101) (4.7.1)
+Requirement already satisfied: adafruit-circuitpython-requests in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-typing->Adafruit-Blinka->adafruit-circuitpython-emc2101) (2.0.0)
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_CircuitPython_EMC2101
+$ cd Adafruit_CircuitPython_EMC2101
+$ ls
+adafruit_emc2101  CODE_OF_CONDUCT.md  docs  examples  LICENSE  LICENSES  optional_requirements.txt  pyproject.toml  README.rst  README.rst.license  requirements.txt
+
+$ ls examples/
+emc2101_lut_example.py  emc2101_set_pwm_freq.py  emc2101_simpletest.py
+
+$ python3 ~/src/github.com/adafruit/Adafruit_CircuitPython_EMC2101/examples/emc2101_simpletest.py 
+Setting fan speed to 25%
+Fan speed 82.4
+Setting fan speed to 50%
+Fan speed 82.4
+Setting fan speed to 75%
+Fan speed 82.4
+Setting fan speed to 100%
+Fan speed 82.4
+^C

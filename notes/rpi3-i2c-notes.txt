@@ -1,0 +1,88 @@
+##############################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Raspberry Pi 3 Model B+ I2C
+###############################################################################
+
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ uname -a 
+Linux rpi7 4.19.42-v7+ #1219 SMP Tue May 14 21:20:58 BST 2019 armv7l GNU/Linux
+
+$ ls /dev/i2c*
+/dev/i2c-1  /dev/i2c-2
+
+$ sudo i2cdetect -l
+i2c-1	i2c       	bcm2835 I2C adapter             	I2C adapter
+i2c-2	i2c       	bcm2835 I2C adapter             	I2C adapter
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x03-0x77.
+Continue? [Y/n] Y
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect 2
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-2.
+I will probe address range 0x03-0x77.
+Continue? [Y/n] Y
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- 37 -- -- 3a -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- 4a 4b -- -- -- -- 
+50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+####################################################################
+## i2c clock stretching bug
+####################################################################
+
+## lower the i2c clock speed
+$ modprobe i2c_bcm2708 baudrate=50000
+
+## or change driver code
+## from:
+##   bcm2708_wr(bi, BSC_DIV, cdiv);
+## to:
+##   bcm2708_wr(bi, BSC_DIV, cdiv * 2);
+
+## i2c driver source code
+## See: github.com/raspberrypi/linuxdrivers/i2c/busses/i2c-bcm2708.c
+
+## i2c clock stretching bug
+## See: https://www.raspberrypi.org/forums/viewtopic.php?p=146272
+## See: https://elinux.org/BCM2835_datasheet_errata#p35_I2C_clock_stretching
+## See: https://www.advamation.com/knowhow/raspberrypi/rpi-i2c-bug.html
+## See: https://github.com/raspberrypi/linux/commit/358395ed00fbb2854c0b7d6166888f3aff524ca4
+
+####################################################################
+## i2cget
+####################################################################
+
+$ sudo i2cget -y 1 0x4e
+
+####################################################################
+## i2c_bcm2835 kernel driver
+####################################################################
+
+$ mkdir -p ~/src/github.com/raspberrypi
+$ cd ~/src/github.com/raspberrypi
+$ git clone https://github.com/raspberrypi/linux.git
+
+$ vi linux/drivers/i2c/busses/i2c-bcm2835.c
+$ vi linux/drivers/i2c/busses/i2c-bcm2708.c

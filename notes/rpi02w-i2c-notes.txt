@@ -1,0 +1,213 @@
+##############################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Raspberry Pi Zero 2 W I2C
+## raspbian 11 (bullseye)
+##############################################################################
+
+$ uname -a
+Linux rpi9 6.1.21-v7+ #1642 SMP Mon Apr  3 17:20:52 BST 2023 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Raspbian
+Description:    Raspbian GNU/Linux 11 (bullseye)
+Release:        11
+Codename:       bullseye
+
+df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       118G  9.2G  104G   9% /
+devtmpfs         85M     0   85M   0% /dev
+tmpfs           214M     0  214M   0% /dev/shm
+tmpfs            86M  1.1M   85M   2% /run
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+/dev/mmcblk0p1  255M   51M  205M  20% /boot
+tmpfs            43M   24K   43M   1% /run/user/1000
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           426Mi       207Mi        84Mi        18Mi       134Mi       150Mi
+Swap:          2.0Gi        16Mi       2.0Gi
+
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-10  /dev/i2c-11  /dev/i2c-2
+
+$ sudo i2cdetect -l
+i2c-1	i2c       	bcm2835 (i2c@7e804000)          	I2C adapter
+i2c-11	i2c       	bcm2835 (i2c@7e205000)          	I2C adapter
+i2c-2	i2c       	bcm2835 (i2c@7e805000)          	I2C adapter
+i2c-0	i2c       	i2c-11-mux (chan_id 0)          	I2C adapter
+i2c-10	i2c       	i2c-11-mux (chan_id 1)          	I2C adapter
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- 57 -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 2
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 0
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 11
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 10
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- 64 -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                   
+
+####################################################################
+## i2c-tools
+####################################################################
+
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ sudo i2cdump
+Error: No i2c-bus specified!
+Usage: i2cdump [-f] [-y] [-r first-last] [-a] I2CBUS ADDRESS [MODE [BANK [BANKREG]]]
+  I2CBUS is an integer or an I2C bus name
+  ADDRESS is an integer (0x03 - 0x77, or 0x00 - 0x7f if -a is given)
+  MODE is one of:
+    b (byte, default)
+    w (word)
+    W (word on even register addresses)
+    s (SMBus block)
+    i (I2C block)
+    c (consecutive byte)
+    Append p for SMBus PEC
+
+$ sudo i2cget
+Usage: i2cget [-f] [-y] [-a] I2CBUS CHIP-ADDRESS [DATA-ADDRESS [MODE]]
+  I2CBUS is an integer or an I2C bus name
+  ADDRESS is an integer (0x03 - 0x77, or 0x00 - 0x7f if -a is given)
+  MODE is one of:
+    b (read byte data, default)
+    w (read word data)
+    c (write byte/read byte)
+    Append p for SMBus PEC
+
+$ sudo i2cset
+Usage: i2cset [-f] [-y] [-m MASK] [-r] [-a] I2CBUS CHIP-ADDRESS DATA-ADDRESS [VALUE] ... [MODE]
+  I2CBUS is an integer or an I2C bus name
+  ADDRESS is an integer (0x03 - 0x77, or 0x00 - 0x7f if -a is given)
+  MODE is one of:
+    c (byte, no value)
+    b (byte data, default)
+    w (word data)
+    i (I2C block data)
+    s (SMBus block data)
+    Append p for SMBus PEC
+
+$ sudo i2cdetect
+Error: No i2c-bus specified!
+Usage: i2cdetect [-y] [-a] [-q|-r] I2CBUS [FIRST LAST]
+       i2cdetect -F I2CBUS
+       i2cdetect -l
+  I2CBUS is an integer or an I2C bus name
+  If provided, FIRST and LAST limit the probing range.
+
+####################################################################
+## i2c-tools source code
+####################################################################
+
+$ mkdir -p ~/src/kernel.org/i2c-tools
+$ cd ~/src/kernel.org/i2c-tools
+$ git clone git://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git
+
+$ cd i2c-tools
+$ ls
+CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
+COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
+
+$ ls tools
+i2cbusses.c  i2cdetect.8  i2cdump.8  i2cget.8  i2cset.8  i2ctransfer.8  Module.mk  util.h
+i2cbusses.h  i2cdetect.c  i2cdump.c  i2cget.c  i2cset.c  i2ctransfer.c  util.c
+
+####################################################################
+## 68: PiSugar 3 
+####################################################################
+
+## See: rpi02w-i2c-pisugar3-notes.txt
+
+####################################################################
+## i2c_bcm2835 kernel driver
+####################################################################
+
+$ mkdir -p ~/src/github.com/raspberrypi
+$ cd ~/src/github.com/raspberrypi
+$ git clone https://github.com/raspberrypi/linux.git
+
+$ vi linux/drivers/i2c/busses/i2c-bcm2835.c
+
+$ lsmod | grep i2c
+regmap_i2c             16384  1 rtc_ds1307
+i2c_mux_pinctrl        16384  0
+i2c_mux                16384  1 i2c_mux_pinctrl
+i2c_bcm2835            16384  0
+i2c_dev                16384  0
+pi@rpi9:~ $ modinfo i2c-bcm2835
+filename:       /lib/modules/6.1.21-v7+/kernel/drivers/i2c/busses/i2c-bcm2835.ko.xz
+alias:          platform:i2c-bcm2835
+license:        GPL v2
+description:    BCM2835 I2C bus adapter
+author:         Stephen Warren <swarren@wwwdotorg.org>
+srcversion:     8E410C86977114B9A6294D4
+alias:          of:N*T*Cbrcm,bcm2835-i2cC*
+alias:          of:N*T*Cbrcm,bcm2835-i2c
+alias:          of:N*T*Cbrcm,bcm2711-i2cC*
+alias:          of:N*T*Cbrcm,bcm2711-i2c
+depends:        
+intree:         Y
+name:           i2c_bcm2835
+vermagic:       6.1.21-v7+ SMP mod_unload modversions ARMv7 p2v8 
+parm:           debug:1=err, 2=isr, 3=xfer (uint)
+parm:           clk_tout_ms:clock-stretch timeout (mS) (uint)
+
+$ dmesg | grep i2c
+[    0.057335] platform 3f801000.csi: Fixed dependency cycle(s) with /soc/i2c0mux/i2c@1/imx219@10
+[    6.195402] i2c_dev: i2c /dev entries driver
+[    9.143990] i2c i2c-11: Added multiplexed i2c bus 0
+[    9.164487] i2c i2c-11: Added multiplexed i2c bus 10

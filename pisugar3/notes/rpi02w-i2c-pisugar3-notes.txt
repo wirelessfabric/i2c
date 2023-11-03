@@ -1,0 +1,165 @@
+##############################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## PiSugar 3 UPS HAT
+## Raspberry Pi Zero 2 W
+## raspbian 11 (bullseye)
+##############################################################################
+
+$ uname -a
+Linux rpi0 5.15.76-v7+ #1597 SMP Fri Nov 4 12:13:17 GMT 2022 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+$ df -H
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       126G  9.1G  112G   8% /
+devtmpfs         90M     0   90M   0% /dev
+tmpfs           224M     0  224M   0% /dev/shm
+tmpfs            90M  1.1M   89M   2% /run
+tmpfs           5.3M  4.1k  5.3M   1% /run/lock
+/dev/mmcblk0p1  268M   53M  216M  20% /boot
+tmpfs            45M   25k   45M   1% /run/user/1000
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           426Mi       207Mi        84Mi        18Mi       134Mi       150Mi
+Swap:          2.0Gi        16Mi       2.0Gi
+
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+####################################################################
+## PiSugar3 I2C: i2c-tools device 0x57
+####################################################################
+
+## See: https://github.com/PiSugar/PiSugar/wiki/PiSugar-3-Series
+
+## When anti-mistaken touch function is turned on, if PiSugar shuts down,
+## first short press the power button, and then release, the LED will
+## indicate the current power. Next, press and hold the power button to
+## achieve the purpose of booting. When anti-mistaken touch function is
+## turned off, short press the power button to trigger the boot.
+
+## Whether the function is turned on or not, when PiSugar is turned on,
+## it needs to be turned off by a long press.
+
+## Software Watchdog
+## See: https://github.com/PiSugar/pisugar-power-manager-rs/blob/master/scripts/SoftwareWatchdogPiSugar3.sh
+
+## Boot Watchdog
+## See: https://github.com/PiSugar/pisugar-power-manager-rs/blob/master/scripts/BootWatchdogPiSugar3.sh
+
+## Version
+$ i2cget -y 1 0x57 0x00
+0x03
+
+## Model
+$ i2cget -y 1 0x57 0x01
+0x0f
+
+## Control 1: Anti-mistaken touch function
+$ i2cget -y 1 0x57 0x02
+0x7c
+
+## Control 2: Soft Shutdown Function
+$ i2cget -y 1 0x57 0x03
+0x40
+
+## Chip Temperature
+$ i2cget -y 1 0x57 0x04
+0x49
+
+## Tap: Custom Button
+$ i2cget -y 1 0x57 0x08
+0x00
+
+## Battery Voltage High Byte
+$ i2cget -y 1 0x57 0x22
+0x0e
+
+## Battery Voltage Low Byte
+$ i2cget -y 1 0x57 0x23
+0x88
+
+## Battery Percentage
+$ i2cget -y 1 0x57 0x2a
+0x44
+
+####################################################################
+## PiSugar3 DS3231 RTC: i2c-tools device 0x68
+####################################################################
+
+## See: https://github.com/PiSugar/PiSugar/wiki/PiSugar-3-Series
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- 57 -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo vi /boot/config.txt
+# add the following line
+dtoverlay=i2c-rtc,ds3231
+
+$ sudo reboot now
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- 57 -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- UU -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --            
+
+$ sudo hwclock -r
+2022-11-29 22:23:42.063686-05:00
+
+$ sudo hwclock -w
+
+$ sudo hwclock -r
+2022-11-29 22:23:48.696294-05:00
+
+####################################################################
+## PiSugar Power Manager
+####################################################################
+##
+## See: https://github.com/PiSugar/pisugar-power-manager-rs
+##
+
+$ mkdir -p ~/src/github.com/PiSugar
+$ cd ~/src/github.com/PiSugar
+$ git clone https://github.com/PiSugar/pisugar-power-manager-rs
+$ cd pisugar-power-manager-rs
+$ ls
+Cargo.lock  CHANGELOG  electron  package-lock.json  pisugar-module    pisugar-programmer  README.md        rustfmt.toml  SECURITY.md
+Cargo.toml  doc        LICENSE   pisugar-core       pisugar-poweroff  pisugar-server      README.zh-CN.md  scripts
+
+$ ls pisugar-module/
+Makefile  pisugar_3_battery.c  README.md
+
+$ sudo dpkg --purge pisugar-server
+$ sudo dpkg --purge pisugar-poweroff
+
+$ wget http://cdn.pisugar.com/release/pisugar-power-manager.sh
+$ bash pisugar-power-manager.sh -c release
+
+####################################################################
+## PiSugar3 Firmware Update
+####################################################################
+
+$ curl https://cdn.pisugar.com/release/PiSugarUpdate.sh | sudo bash

@@ -1,0 +1,148 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## MCP2221A - Microchip USB to I2C Host Protocol Bridge
+#######################################################################
+##
+## Adafruit MCP2221A Breakout - General Purpose USB to GPIO ADC I2C 
+## See: https://www.adafruit.com/product/4471
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/linux
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/post-install-checks
+##
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/20005565B.pdf
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/mcp2221_0_1.tar.gz
+##
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-generic.c
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-mcp2221.c
+##
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-generic.c
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-mcp2221.c
+##
+## See: https://libusb.info/
+## See: https://github.com/libusb/libusb.git
+## See: https://github.com/libusb/hidapi.git
+## See: https://github.com/gregkh/usbutils.git
+## See: https://github.com/todbot/hidapitester.git
+
+####################################################################
+## libusb hidapi windows
+####################################################################
+
+C:> mkdir C:\src\github.com\libusb
+C:> cd C:\src\github.com\libusb
+C:> git clone https://github.com/libusb/hidapi.git
+
+####################################################################
+## clone the i2c repo
+####################################################################
+
+C:> mkdir C:\src\github.com\wirelessfabric
+C:> cd C:\src\github.com\wirelessfabric
+C:> git clone https://github.com/wirelessfabric/i2c.git
+
+C:> %comspec% /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+C:> nmake /f Makefile.mak clean
+C:> nmake /f Makefile.mak
+
+####################################################################
+## execute the i2c examples
+####################################################################
+
+C:> mcp2221a\scan_i2c_hid.exe
+i2c_scan(0x30): ACK
+i2c_scan(0x31): ACK
+i2c_scan(0x32): ACK
+i2c_scan(0x33): ACK
+i2c_scan(0x34): ACK
+i2c_scan(0x38): ACK
+i2c_scan(0x49): ACK
+i2c_scan(0x4c): ACK
+i2c_scan(0x5e): ACK
+i2c_scan(0x77): ACK
+
+C:> adafruit\neokey1x4_i2c_hid.exe
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Button A: Pressed
+Button A: Released
+Button B: Pressed
+Button B: Released
+Button C: Pressed
+Button C: Released
+Button D: Pressed
+Button D: Released
+^C
+
+C:> adafruit\neorotary1x4_i2c_hid.exe
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Position A: 11
+Position A: 16
+Position A: 19
+Position A: 21
+Position A: 17
+^C
+
+C:> adafruit\neoslider_i2c_hid.exe --i2c_addr=0x31
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x001f (31)
+Slider: 0x00c4 (196)
+^C
+
+C:> adafruit\neoslider_i2c_hid.exe --i2c_addr=0x32
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x0066 (102)
+Slider: 0x0196 (406)
+^C
+
+C:> adafruit\neoslider_i2c_hid.exe --i2c_addr=0x33
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x001e (30)
+^C
+
+C:> adafruit\neoslider_i2c_hid.exe --i2c_addr=0x34
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x0001 (1)
+Slider: 0x0079 (121)
+Slider: 0x00ee (238)
+Slider: 0x0140 (320)
+^C
+
+C:> bme280\bme280_i2c_hid.exe
+Temperature: 20.39 C 68.70 F
+Humidity: 58.49 %
+Pressure: 970.56 hPa
+Altitude: 361.64 meters
+
+Temperature: 20.40 C 68.72 F
+Humidity: 58.47 %
+Pressure: 970.44 hPa
+Altitude: 362.65 meters
+
+^C
+
+C:> tlv493d\tlv493d_i2c_hid.exe
+X:    0.00      Y: -294.00      Z:    0.00      T:  20.60 C  69.08 F
+X:  196.00      Y:  -98.00      Z:  -98.00      T:  20.60 C  69.08 F
+X:   98.00      Y:  -98.00      Z:  -98.00      T:  20.60 C  69.08 F
+^C
+
+C:> emc2101\emc2101_i2c_hid.exe
+External Temperature:  20.62 C  69.12 F
+Internal Temperature:  20.00 C  68.00 F
+
+External Temperature:  20.62 C  69.12 F
+Internal Temperature:  20.00 C  68.00 F
+
+^C

@@ -1,0 +1,227 @@
+####################################################################
+## DS3231 I2C RTC
+####################################################################
+
+## HiLetgo 5pcs DS3231 High Precision RTC
+## Real Time Clock Module 3.3V/5V Arduino Raspberry Pi
+
+## See: https://www.youtube.com/watch?v=jABiEUV1bvk
+## See: https://www.amazon.com/gp/product/B01N1LZSK3
+## See: https://datasheets.maximintegrated.com/en/ds/DS3231.pdf
+
+###############################################################################
+## tegra2 (model B01)
+###############################################################################
+
+$ uname -a
+Linux tegra2 4.9.140-tegra #1 SMP PREEMPT Mon Dec 9 22:47:42 PST 2019 aarch64 aarch64 aarch64 GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 18.04.4 LTS
+Release:	18.04
+Codename:	bionic
+
+$ dmesg | grep i2c
+[    0.458217] iommu: Adding device 546c0000.i2c to group 22
+[    0.459597] tegra-pmc 7000e400.pmc: i2c-thermtrip node not found, emergency thermal reset disabled.
+[    0.510436] iommu: Adding device 7000c000.i2c to group 25
+[    0.510754] iommu: Adding device 7000c400.i2c to group 26
+[    0.511071] iommu: Adding device 7000c500.i2c to group 27
+[    0.511321] iommu: Adding device 7000c700.i2c to group 28
+[    0.511655] iommu: Adding device 7000d000.i2c to group 29
+[    0.511949] iommu: Adding device 7000d100.i2c to group 30
+[    1.246223] i2c /dev entries driver
+[    1.247773] i2c i2c-6: Added multiplexed i2c bus 7
+[    1.248168] i2c i2c-6: Added multiplexed i2c bus 8
+[    1.248173] i2c-mux-gpio cam_i2cmux: 2 port mux on Tegra I2C adapter adapter
+[    3.669261] tegra-vii2c 546c0000.i2c: no acknowledge from address 0x10
+
+$ dmesg | grep rtc
+[    0.601001] vdd-rtc: 850 <--> 1100 mV at 1000 mV 
+[    0.644380] camchar: rtcpu character device driver loaded
+[    1.243679] max77686-rtc max77620-rtc: rtc core: registered max77620-rtc as rtc0
+[    1.245841] rtc rtc1: alarm rtc device
+[    1.245853] tegra_rtc 7000e000.rtc: rtc core: registered 7000e000.rtc as rtc1
+[    1.245869] tegra_rtc 7000e000.rtc: Tegra internal Real Time Clock
+[    1.452285] tegra_rtc 7000e000.rtc: setting system clock to 2020-05-02 19:58:47 UTC (1588449527)
+
+$ ls -l /sys/class/rtc/
+total 0
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc0 -> ../../devices/7000d000.i2c/i2c-4/4-003c/max77620-rtc/rtc/rtc0
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc1 -> ../../devices/7000e000.rtc/rtc/rtc1
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc2 -> ../../devices/7000c400.i2c/i2c-1/1-0068/rtc/rtc2
+
+$ ls -l /dev/rtc*
+lrwxrwxrwx 1 root root      4 May  2 12:58 /dev/rtc -> rtc1
+crw------- 1 root root 252, 0 May  2 12:58 /dev/rtc0
+crw------- 1 root root 252, 1 May  2 12:58 /dev/rtc1
+
+$ sudo i2cdetect -y -r 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- 28 -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo modprobe rtc-ds1307
+
+$ sudo lsmod | grep rtc
+rtc_ds1307             22705  0
+
+$ sudo bash
+$ echo ds1307 0x68 | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+$ exit
+
+$ ls -l /sys/class/rtc/
+total 0
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc0 -> ../../devices/7000d000.i2c/i2c-4/4-003c/max77620-rtc/rtc/rtc0
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc1 -> ../../devices/7000e000.rtc/rtc/rtc1
+lrwxrwxrwx 1 root root 0 May  2 13:16 rtc2 -> ../../devices/7000c400.i2c/i2c-1/1-0068/rtc/rtc2
+
+$ ls -l /dev/rtc*
+lrwxrwxrwx 1 root root      4 May  2 12:58 /dev/rtc -> rtc1
+crw------- 1 root root 252, 0 May  2 12:58 /dev/rtc0
+crw------- 1 root root 252, 1 May  2 12:58 /dev/rtc1
+crw------- 1 root root 252, 2 May  2 13:16 /dev/rtc2
+
+$ dmesg | grep i2c
+[    2.191457] i2c /dev entries driver
+[    6.559574] i2c i2c-1: new_device: Instantiated device ds1307 at 0x68
+
+$ sudo hwclock -r -s -f /dev/rtc2
+2020-04-26 02:15:53.577666-0700
+
+$ date
+Sun Apr 26 02:16:10 PDT 2020
+
+$ sudo hwclock -w -f /dev/rtc2
+
+$ sudo hwclock -r -f /dev/rtc2
+2020-04-26 02:16:43.696154-0700
+
+$ sudo vi /etc/modules
+# Add the text rtc-ds1307 on last line of file
+
+$ cat /etc/modules
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+
+i2c-dev
+rtc-ds1307
+
+$ sudo vi /etc/rc.local
+# Add the following lines befre the exit 0 line
+# Make sure the file decorations and exit 0 are there too
+echo ds1307 0x68 | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+sudo hwclock -s -f /dev/rtc2
+date
+
+$ cat /etc/rc.local
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
+echo ds1307 0x68 | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+sudo hwclock -s -f /dev/rtc2
+date
+
+exit 0
+
+$ sudo chmod a+rx /etc/rc.local
+$ ls -l /etc/rc.local
+
+$ sudo vi /etc/systemd/system/rc-local.service
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
+
+[Service]
+ Type=forking
+ ExecStart=/etc/rc.local start
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
+
+[Install]
+ WantedBy=multi-user.target
+
+$ sudo systemctl enable rc-local
+$ sudo systemctl status rc-local
+
+###############################################################################
+## modprobe: FATAL: Module rtc-ds1307 not found on L4T R32.3.1
+###############################################################################
+
+## See: https://github.com/JetsonHacksNano/buildKernelAndModules
+
+$ sudo modprobe rtc-ds1307
+modprobe: FATAL: Module rtc-ds1307 not found in directory /lib/modules/4.9.140-tegra
+
+$ mkdir -p ~/src/nvidia.com
+$ mkdir -p ~/src/github.com/JetsonHacksNano
+$ cd ~/src/github.com/JetsonHacksNano
+$ git clone https://github.com/JetsonHacksNano/buildKernelAndModules.git
+$ cd buildKernelAndModules
+
+$ sudo ./scripts/installDependencies.sh
+$ ./getKernelSources.sh -d ~/src/nvidia.com
+$ sudo vi ~/src/nvidia.com/kernel/kernel-4.9/.config
+CONFIG_RTC_DRV_DS1307=m
+$ ./makeKernel.sh -d ~/src/nvidia.com
+$ cd ~/src/nvidia.com/kernel/kernel-4.9/
+$ sudo make M=drivers/rtc/
+$ sudo mkdir -p /lib/modules/4.9.140-tegra/kernel/drivers/rtc/
+$ sudo cp drivers/rtc/rtc-ds1307.ko /lib/modules/4.9.140-tegra/kernel/drivers/rtc/
+$ sudo ls /lib/modules/4.9.140-tegra/kernel/drivers/rtc/
+rtc-ds1307.ko
+$ sudo depmod -a
+
+$ sudo bash
+$ echo ds1307 0x68 | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+$ exit
+
+###############################################################################
+## on L4T R32.5.1
+###############################################################################
+
+$ sudo ./scripts/installDependencies.sh
+$ ./getKernelSources.sh -d ~/src/nvidia.com
+$ sudo vi ~/src/nvidia.com/kernel/kernel-4.9/.config
+CONFIG_RTC_DRV_DS3232=m
+$ ./makeKernel.sh -d ~/src/nvidia.com
+$ cd ~/src/nvidia.com/kernel/kernel-4.9/
+$ sudo make M=drivers/rtc/
+$ sudo mkdir -p /lib/modules/4.9.201-tegra/kernel/drivers/rtc/
+$ sudo cp drivers/rtc/rtc-ds3232.ko /lib/modules/4.9.201-tegra/kernel/drivers/rtc/
+$ sudo ls /lib/modules/4.9.201-tegra/kernel/drivers/rtc/
+rtc-ds3232.ko
+$ sudo depmod -a
+$ sudo modprobe rtc-ds3232
+
+$ sudo bash
+$ echo ds3232 0x68 | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+$ exit
+

@@ -1,0 +1,325 @@
+##############################################################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Adafruit LC709203F LiPoly / LiIon Fuel Gauge and Battery Monitor
+##############################################################################################################
+##
+## Smart LiB Gauge Battery Fuel Gauge LSI For 1-Cell Lithium-ion/Polymer (Li+)
+##
+## See: https://learn.adafruit.com/adafruit-lc709203f-lipo-lipoly-battery-monitor/python-circuitpython
+## See: https://github.com/adafruit/Adafruit_CircuitPython_LC709203F
+## See: https://github.com/adafruit/Adafruit_LC709203F
+## See: https://www.pilover.com/wp-content/uploads/2021/02/adafruit-lc709203f-lipo-lipoly-battery-monitor.pdf
+## See: https://cdn-learn.adafruit.com/assets/assets/000/094/597/original/LC709203F-D.PDF?1599248750
+##
+## Watch out for battery polarity if not using an Adafruit battery! A reversed battery
+## will damage the monitor. There are + and - symbols on the PCB to indicate which is which.
+##
+## LC709203 uses clock stretching. Older Pis (Pi 1, 2, 3, Zero) will need to slow down the
+## I2C clock to 10KHz.
+## See: https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/i2c-clock-stretching
+##
+## The battery temperature will not be accurate UNLESS you have connected a 10K ohm
+## thermistor to the THERM input pin! If you don't have the thermistor attached, 
+## ignore the temp reading! Connect a 10K thermistor to the THERM pin to read the
+## battery pack temperature. The other side of the thermistor goes to ground.
+## Adafruit battery packs do not come with a built in thermistor but many do.
+##
+## Make sure a battery is plugged into the board, it must be powered by the battery
+## to function! The LC709203F is powered by the connected battery, not by VIN or the
+## STEMMA/QT connector. If no battery is plugged in, or the battery is too low, the
+## LC709203F will not respond to I2C scans or commands.
+##
+## There are two pads connected by a trace on the back of the board, labeled LED. If
+## you want to conserve power when running only on battery, you can cut this trace to
+## disable the LED on the breakout.
+##
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ uname -a
+Linux rpi3 6.1.21-v7l+ #1642 SMP Mon Apr  3 17:22:30 BST 2023 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+####################################################################
+## i2c-tools device 0x0b
+####################################################################
+
+$ ls /dev/i2c*
+/dev/i2c-1
+
+$ sudo i2cdetect -l
+i2c-1	i2c       	bcm2835 I2C adapter             	I2C adapter
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- 0b -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdump -y 1 0x0b
+No size specified (using byte-data access)
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 00 01 02 00 d8 c0 34 55 a6 f8 00 2d 1e 64 0e e8    .??.??4U??.-?d??
+10: 00 17 00 08 00 01 00 17 18 19 01 1b 1c 1d 1e 1f    .?.?.?.?????????
+20: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+30: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+40: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+50: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+60: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+70: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+80: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+90: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+a0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+b0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+c0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+d0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+e0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+f0: 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f 1f    ????????????????
+
+$ sudo i2cdump -y 1 0x0b w
+     0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
+00: 0000 0001 0002 0000 03d2 00c0 0d34 55aa 
+08: 0ba6 11f8 0000 002d 001e 0064 000e 03e8 
+10: 0000 2717 0000 0008 0000 0001 0000 0017 
+18: 0018 0019 0301 001b 001c 001d 001e 001f 
+20: 001f 001f 001f 001f 001f 001f 001f 001f 
+28: 001f 001f 001f 001f 001f 001f 001f 001f 
+30: 001f 001f 001f 001f 001f 001f 001f 001f 
+38: 001f 001f 001f 001f 001f 001f 001f 001f 
+40: 001f 001f 001f 001f 001f 001f 001f 001f 
+48: 001f 001f 001f 001f 001f 001f 001f 001f 
+50: 001f 001f 001f 001f 001f 001f 001f 001f 
+58: 001f 001f 001f 001f 001f 001f 001f 001f 
+60: 001f 001f 001f 001f 001f 001f 001f 001f 
+68: 001f 001f 001f 001f 001f 001f 001f 001f 
+70: 001f 001f 001f 001f 001f 001f 001f 001f 
+78: 001f 001f 001f 001f 001f 001f 001f 001f 
+80: 001f 001f 001f 001f 001f 001f 001f 001f 
+88: 001f 001f 001f 001f 001f 001f 001f 001f 
+90: 001f 001f 001f 001f 001f 001f 001f 001f 
+98: 001f 001f 001f 001f 001f 001f 001f 001f 
+a0: 001f 001f 001f 001f 001f 001f 001f 001f 
+a8: 001f 001f 001f 001f 001f 001f 001f 001f 
+b0: 001f 001f 001f 001f 001f 001f 001f 001f 
+b8: 001f 001f 001f 001f 001f 001f 001f 001f 
+c0: 001f 001f 001f 001f 001f 001f 001f 001f 
+c8: 001f 001f 001f 001f 001f 001f 001f 001f 
+d0: 001f 001f 001f 001f 001f 001f 001f 001f 
+d8: 001f 001f 001f 001f 001f 001f 001f 001f 
+e0: 001f 001f 001f 001f 001f 001f 001f 001f 
+e8: 001f 001f 001f 001f 001f 001f 001f 001f 
+f0: 001f 001f 001f 001f 001f 001f 001f 001f 
+f8: 001f 001f 001f 001f 001f 001f 001f 001f 
+
+## Command Code 0x08 - Read/Write - Cell Temperature
+## 0x0000 - 0xFFFF
+## units of 0.1K
+## 0.0C = 0x0AAC (2732)
+## Initial Value = 25.0C = 0x0BA6 (2982)
+$ sudo i2cget -y -a 1 0x0b 0x08 w
+0x0ba6
+$ sudo i2cset -y -a 1 0x0b 0x08 0x0ba6 w
+
+## Command Code 0x09 - Read Only - Cell Voltage
+## 0x11f8 is 4600 decimal
+## divide by 1000 to get 4.6V
+$ sudo i2cget -y -a 1 0x0b 0x09 w
+0x11f8
+
+## Command Code 0x0A - Read/Write - Current Direction
+## 0x0000 - Auto Mode
+## 0x0001 - Charge Mode
+## 0x0002 - Discharge Mode
+$ sudo i2cget -y -a 1 0x0b 0x0a w
+0x0000
+
+## Command Code 0x0B - Read/Write - APA (Adjustment Pack Application)
+## 0x0000 to 0x00FF
+$ sudo i2cget -y -a 1 0x0b 0x0b w
+0x0064
+$ sudo i2cset -y -a 1 0x0b 0x0b 0x0010 w
+
+## Command Code 0x0D - Read/Write - RSOC (Relative State Of Charge)
+## scale is 1 to 100 in units of 1%
+## 0x0064 is 100 decimal for 100%
+$ sudo i2cget -y -a 1 0x0b 0x0d w
+0x0064
+$ sudo i2cset -y -a 1 0x0b 0x0d 0x0040 w
+
+## Command Code 0x0F - Read Only - ITE (Indicator to Empty) - Cell Percentage
+## scale is 1-1000 in units of 0.1%
+## 0x03e8 is 1000 decimal
+## divide by 10 to get 100% remaining
+$ sudo i2cget -y -a 1 0x0b 0x0f w
+0x03e8
+
+## Command Code 0x11 - Read Only - IC Version
+$ sudo i2cget -y -a 1 0x0b 0x11 w
+0x2717
+
+## Command Code 0x12 - Read/Write - Set The Parameter (Battery Profile)
+## 0x0000 or 0x0001
+$ sudo i2cget -y -a 1 0x0b 0x12 w
+0x0000
+$ sudo i2cset -y -a 1 0x0b 0x12 0x0001 w
+
+## Command Code 0x15 - Read/Write - IC Power Mode
+## 0x0001 - Operational
+## 0x0002 - Sleep
+sudo i2cget -y -a 1 0x0b 0x15 w
+0x0001
+
+## Command Code 0x16 - Read/Write - Status Bit (Temperature Obtaining Method)
+## 0x0000 - I2C Mode
+## 0x0001 - Thermistor Mode
+$ sudo i2cget -y -a 1 0x0b 0x16 w
+0x0000
+$ sudo i2cset -y -a 1 0x0b 0x16 0x0001 w
+
+## Command Code 0x1A - Read Only - Number of The Parameter (Battery Profile)
+$ sudo i2cget -y -a 1 0x0b 0x1A w
+0x0301
+
+##
+## Initialization
+##
+## Set IC Power Mode to Operational
+$ sudo i2cset -y -a 1 0x0b 0x15 0x0001 w
+## Set APA to 500mAh
+$ sudo i2cset -y -a 1 0x0b 0x0b 0x0010 w
+## Set Battery Profile to 4.2V
+$ sudo i2cset -y -a 1 0x0b 0x0b 0x0001 w
+## Initial RSOC
+$ sudo i2cset -y -a 1 0x0b 0x07 0xAA55 w
+## Select I2C Temperature Obtaining Method
+$ sudo i2cset -y -a 1 0x0b 0x16 0x0000 w
+## Set Temperature to 25.0C
+$ sudo i2cset -y -a 1 0x0b 0x08 0x0ba6 w
+
+## Monitor Cell Percentage
+$ sudo watch -n 1 i2cget -y -a 1 0x0b 0x0f w
+Every 1.0s: i2cget -y -a 1 0x0b 0x0f w                rpi3: Fri Feb 12 20:59:44 2021
+
+0x03e8
+
+## Monitor Cell Voltage
+$ sudo watch -n 1 i2cget -y -a 1 0x0b 0x09 w
+Every 1.0s: i2cget -y -a 1 0x0b 0x09 w                rpi3: Fri Feb 12 20:59:44 2021
+
+0x11f8
+
+####################################################################
+## Adafruit CircuitPython
+####################################################################
+
+## See: rpi4-circuitpython-notes.txt
+
+####################################################################
+## Adafruit CircuitPython library for Adafruit LC709203F breakout
+## See: https://github.com/adafruit/Adafruit_CircuitPython_LC709203F.git
+####################################################################
+
+$ ls /dev/i2c* /dev/spi*
+/dev/i2c-1  /dev/spidev0.0  /dev/spidev0.1
+
+$ sudo pip3 install adafruit-circuitpython-lc709203f
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: adafruit-circuitpython-lc709203f in /usr/local/lib/python3.7/dist-packages (2.0.0)
+Requirement already satisfied: adafruit-circuitpython-busdevice in /usr/local/lib/python3.7/dist-packages (from adafruit-circuitpython-lc709203f) (5.0.5)
+Requirement already satisfied: adafruit-circuitpython-register in /usr/local/lib/python3.7/dist-packages (from adafruit-circuitpython-lc709203f) (1.9.4)
+Requirement already satisfied: Adafruit-Blinka in /usr/local/lib/python3.7/dist-packages (from adafruit-circuitpython-lc709203f) (6.2.1)
+Requirement already satisfied: pyftdi>=0.40.0 in /usr/local/lib/python3.7/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-lc709203f) (0.52.9)
+Requirement already satisfied: Adafruit-PureIO>=1.1.7 in /usr/local/lib/python3.7/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-lc709203f) (1.1.8)
+Requirement already satisfied: Adafruit-PlatformDetect>=3.1.0 in /usr/local/lib/python3.7/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-lc709203f) (3.1.0)
+Requirement already satisfied: pyusb>=1.0.0 in /usr/local/lib/python3.7/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-lc709203f) (1.1.1)
+Requirement already satisfied: pyserial>=3.0 in /usr/lib/python3/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-lc709203f) (3.4)
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_CircuitPython_LC709203F.git
+$ cd Adafruit_CircuitPython_LC709203F
+$ ls
+adafruit_lc709203f.py  CODE_OF_CONDUCT.md  docs  examples  LICENSE  LICENSES  pyproject.toml  README.rst  README.rst.license  requirements.txt  setup.py
+$ cd examples
+$ python3 lc709203f_simpletest.py 
+LC709203F simple test
+Make sure LiPoly battery is plugged into the board!
+IC version: 0x2717
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+Battery: 4.600 Volts / 100.0 %
+^C
+
+####################################################################
+## Adafruit Arduino library for Adafruit LC709203F breakout
+## See: https://github.com/adafruit/Adafruit_LC709203F
+####################################################################
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_LC709203F
+
+##
+## Adafruit_LC709203F.h
+##
+
+#define LC709203F_I2CADDR_DEFAULT 0x0B     ///< LC709203F default i2c address
+#define LC709203F_CMD_THERMISTORB 0x06     ///< Read/write thermistor B
+#define LC709203F_CMD_INITRSOC 0x07        ///< Initialize RSOC calculation
+#define LC709203F_CMD_CELLTEMPERATURE 0x08 ///< Read/write batt temperature
+#define LC709203F_CMD_CELLVOLTAGE 0x09     ///< Read batt voltage
+#define LC709203F_CMD_APA 0x0B             ///< Adjustment Pack Application
+#define LC709203F_CMD_RSOC 0x0D            ///< Read state of charge
+#define LC709203F_CMD_CELLITE 0x0F         ///< Read batt indicator to empty
+#define LC709203F_CMD_ICVERSION 0x11       ///< Read IC version
+#define LC709203F_CMD_BATTPROF 0x12        ///< Set the battery profile
+#define LC709203F_CMD_ALARMRSOC 0x13       ///< Alarm on percent threshold
+#define LC709203F_CMD_ALARMVOLT 0x14       ///< Alarm on voltage threshold
+#define LC709203F_CMD_POWERMODE 0x15       ///< Sets sleep/power mode
+#define LC709203F_CMD_STATUSBIT 0x16       ///< Temperature obtaining method
+#define LC709203F_CMD_PARAMETER 0x1A       ///< Batt profile code
+
+##
+## Adafruit_LC709203F.cpp
+##
+
+/*!
+ *    @brief  Get battery voltage
+ *    @return Floating point value read in Volts
+ */
+float Adafruit_LC709203F::cellVoltage(void) {
+  uint16_t voltage = 0;
+  readWord(LC709203F_CMD_CELLVOLTAGE, &voltage);
+  return voltage / 1000.0;
+}
+
+/*!
+ *    @brief  Get battery state in percent (0-100%)
+ *    @return Floating point value from 0 to 100.0
+ */
+float Adafruit_LC709203F::cellPercent(void) {
+  uint16_t percent = 0;
+  readWord(LC709203F_CMD_CELLITE, &percent);
+  return percent / 10.0;
+}

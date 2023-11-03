@@ -1,0 +1,357 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Pimoroni HyperPixel 4.0 Touchscreen
+## Raspberry Pi 3 Model B+ I2C
+## Raspbian 11 (bullseye)
+###############################################################################
+
+$ uname -a
+Linux rpi7 6.1.21-v7+ #1642 SMP Mon Apr  3 17:20:52 BST 2023 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+$ df -H
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       126G   15G  106G  13% /
+devtmpfs        450M     0  450M   0% /dev
+tmpfs           484M     0  484M   0% /dev/shm
+tmpfs           194M  1.1M  193M   1% /run
+tmpfs           5.3M  4.1k  5.3M   1% /run/lock
+/dev/mmcblk0p1  265M   53M  212M  20% /boot
+tmpfs            97M   29k   97M   1% /run/user/1000
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           922Mi       159Mi       257Mi       2.0Mi       505Mi       706Mi
+Swap:           99Mi          0B        99Mi
+
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-10  /dev/i2c-11  /dev/i2c-12
+
+$ sudo i2cdetect -l
+i2c-11	i2c       	i2c@0                           	I2C adapter
+i2c-12	i2c       	bcm2835 (i2c@7e205000)          	I2C adapter
+i2c-0	i2c       	i2c-12-mux (chan_id 0)          	I2C adapter
+i2c-10	i2c       	i2c-12-mux (chan_id 1)          	I2C adapter
+
+$ sudo i2cdetect 11
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-11.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 0
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --       
+
+$ sudo i2cdetect -y 10
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- 64 -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect -y 12
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- 64 -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --     
+
+###############################################################################
+## Using the alternate I2C interface on Pimoroni HyperPixel 4.0
+###############################################################################
+
+## See: https://learn.pimoroni.com/article/getting-started-with-hyperpixel-4#using-the-alternate-i2c-interface-on-hyperpixel-4-0-for-advanced-users
+
+## 3.3V RED
+## SDA  BLUE
+## SCL  YELLOW
+## INT  PURPLE
+## GND  BLACK
+
+$ sudo vi /boot/config.txt
+...
+dtparam=i2c_arm=off
+#dtparam=i2s=on
+#dtparam=spi=on
+...
+dtoverlay=vc4-kms-v3d
+...
+# Enable Pimoroni HyperPixel 4 Touchscreen
+dtoverlay=vc4-kms-dpi-hyperpixel4
+#dtparam=touchscreen-swapped-x-y,touchscreen-inverted-x
+#dtparam=rotate=90,touchscreen-swapped-x-y,touchscreen-inverted-y
+#dtparam=rotate=180
+#dtparam=rotate=270,touchscreen-swapped-x-y,touchscreen-inverted-x
+dtparam=rotate=270,touchscreen-inverted-x-y
+...
+[all]
+arm_64bit=0
+
+$ sudo lsmod | grep gpio
+spi_gpio               16384  0
+spi_bitbang            16384  1 spi_gpio
+i2c_gpio               16384  0
+i2c_algo_bit           16384  1 i2c_gpio
+gpio_backlight         16384  0
+backlight              20480  3 gpio_backlight,drm_kms_helper,drm
+
+# on each boot
+$ sudo ln -s /dev/i2c-11 /dev/i2c-1
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-10  /dev/i2c-11  /dev/i2c-12
+
+$ ls -l /dev/i2c*
+crw-rw---- 1 root i2c  89,  0 Apr 19 18:17 /dev/i2c-0
+lrwxrwxrwx 1 root root     11 Apr 19 18:23 /dev/i2c-1 -> /dev/i2c-11
+crw-rw---- 1 root i2c  89, 10 Apr 19 18:17 /dev/i2c-10
+crw-rw---- 1 root i2c  89, 11 Apr 19 18:17 /dev/i2c-11
+crw-rw---- 1 root i2c  89, 12 Apr 19 18:17 /dev/i2c-12
+
+$ sudo i2cdetect -l
+i2c-11	i2c       	i2c@0                           	I2C adapter
+i2c-12	i2c       	bcm2835 (i2c@7e205000)          	I2C adapter
+i2c-0	i2c       	i2c-12-mux (chan_id 0)          	I2C adapter
+i2c-10	i2c       	i2c-12-mux (chan_id 1)          	I2C adapter
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                 
+
+$ sudo i2cdetect 11
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-11.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+########################################################################
+## Adafruit VL53L0X Time of Flight Micro-LIDAR Distance Sensor Breakout
+########################################################################
+
+## See: https://learn.adafruit.com/adafruit-vl53l0x-micro-lidar-distance-sensor-breakout/python-circuitpython
+## See: https://learn.adafruit.com/assets/93504
+
+## ID 0x29
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --              
+
+$ sudo pip3 install adafruit-circuitpython-vl53l0x
+
+## Download+Extract Python Examples
+## https://github.com/adafruit/Adafruit_CircuitPython_VL53L0X/releases/tag/3.6.3
+
+########################################################################
+## Adafruit TLV493D Triple-Axis Magnetometer - STEMMA QT / Qwiic
+########################################################################
+
+## See: https://learn.adafruit.com/adafruit-tlv493-triple-axis-magnetometer
+
+## ID 0x5e
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU 5e -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --              
+
+$ sudo pip3 install adafruit-circuitpython-tlv493d
+
+## Download+Extract Python Examples:
+## https://github.com/adafruit/adafruit_CircuitPython_TLV493D/releases/tag/1.2.9
+
+################################################################################
+## Adafruit BME280 I2C or SPI Temperature Humidity Pressure Sensor - STEMMA QT
+################################################################################
+
+## See: https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/overview
+
+## ID 0x77
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU 5e -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- 77                         
+
+$ sudo pip3 install adafruit-circuitpython-bme280
+
+## Clone Examples:
+## https://github.com/adafruit/Adafruit_CircuitPython_BME280.git
+
+########################################################################
+## Adafruit I2C QT Rotary Encoder
+########################################################################
+
+## See: https://learn.adafruit.com/adafruit-i2c-qt-rotary-encoder
+
+## ID 0x36, 0x37, 0x38
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
+30: -- -- -- -- -- -- 36 37 38 -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU 5e -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- 77                         
+
+$ pip3 install adafruit-circuitpython-seesaw
+
+## Clone Examples:
+## https://github.com/adafruit/Adafruit_CircuitPython_seesaw.git
+## https://github.com/adafruit/Adafruit_CircuitPython_seesaw/blob/main/examples/seesaw_rotary_simpletest.py
+## https://github.com/adafruit/Adafruit_CircuitPython_seesaw/blob/main/examples/seesaw_rotary_neopixel.py
+## https://github.com/adafruit/Adafruit_CircuitPython_seesaw/blob/main/examples/seesaw_rotary_multiples.py
+
+########################################################################
+## Adafruit LC709203F LiPoly / LiIon Fuel Gauge and Battery Monitor
+########################################################################
+
+## See: https://learn.adafruit.com/adafruit-lc709203f-lipo-lipoly-battery-monitor
+
+## ID ??
+
+## LC709203F does clock stretching
+## HOWTO with Pimoroni HyperPixel 4 Touchscreen i2c
+
+$ sudo i2cdetect 1
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1.
+I will probe address range 0x08-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- UU 5e -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- 77                         
+
+$ pip3 install adafruit-circuitpython-lc709203f
+
+## Download+Extract Python Examples:
+## https://github.com/adafruit/Adafruit_CircuitPython_LC709203F/blob/main/examples/lc709203f_simpletest.py
+
+####################################################################
+## i2c clock stretching bug
+####################################################################
+
+## lower the i2c clock speed
+$ modprobe i2c_bcm2708 baudrate=50000
+
+## or change driver code
+## from:
+##   bcm2708_wr(bi, BSC_DIV, cdiv);
+## to:
+##   bcm2708_wr(bi, BSC_DIV, cdiv * 2);
+
+## i2c driver source code
+## See: github.com/raspberrypi/linuxdrivers/i2c/busses/i2c-bcm2708.c
+
+## i2c clock stretching bug
+## See: https://www.raspberrypi.org/forums/viewtopic.php?p=146272
+## See: https://elinux.org/BCM2835_datasheet_errata#p35_I2C_clock_stretching
+## See: https://www.advamation.com/knowhow/raspberrypi/rpi-i2c-bug.html
+## See: https://github.com/raspberrypi/linux/commit/358395ed00fbb2854c0b7d6166888f3aff524ca4
+
+####################################################################
+## i2cget
+####################################################################
+
+$ sudo i2cget -y 1 0x4e
+

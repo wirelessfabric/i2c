@@ -1,0 +1,78 @@
+###############################################################################
+## i2c
+###############################################################################
+
+$ uname -a
+Linux odroid2 4.19.219-odroid-arm64 #1 SMP Thu, 21 Jul 2022 02:25:29 +0000 aarch64 aarch64 aarch64 GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 20.04.4 LTS
+Release:	20.04
+Codename:	focal
+
+$ sudo apt update
+$ sudo apt upgrade
+
+$ sudo apt install libi2c-dev i2c-tools
+
+$ ls /dev/i2c*
+/dev/i2c-2  /dev/i2c-3  /dev/i2c-6
+
+$ sudo i2cdetect -l
+i2c-3	i2c       	rk3x-i2c                        	I2C adapter
+i2c-6	i2c       	DesignWare HDMI                 	I2C adapter
+i2c-2	i2c       	rk3x-i2c                        	I2C adapter
+
+$ sudo i2cdetect 3
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-3.
+I will probe address range 0x03-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- -- 
+20: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect 6
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-6.
+I will probe address range 0x03-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: 30 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: 50 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+$ sudo i2cdetect 2
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-2.
+I will probe address range 0x03-0x77.
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- UU -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+####################################################################
+## i2cget
+####################################################################
+
+$ sudo i2cget -y 1 0x4e
+

@@ -1,0 +1,295 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## MCP2221A - Microchip USB to I2C Host Protocol Bridge
+#######################################################################
+##
+## Adafruit MCP2221A Breakout - General Purpose USB to GPIO ADC I2C 
+## See: https://www.adafruit.com/product/4471
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/linux
+## See: https://learn.adafruit.com/circuitpython-libraries-on-any-computer-with-mcp2221/post-install-checks
+##
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/20005565B.pdf
+## See: https://ww1.microchip.com/downloads/en/DeviceDoc/mcp2221_0_1.tar.gz
+##
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-generic.c
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-mcp2221.c
+##
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-generic.c
+## See: https://github.com/torvalds/linux/blob/master/drivers/hid/hid-mcp2221.c
+##
+## See: https://libusb.info/
+## See: https://github.com/libusb/libusb.git
+## See: https://github.com/libusb/hidapi.git
+## See: https://github.com/gregkh/usbutils.git
+## See: https://github.com/todbot/hidapitester.git
+
+####################################################################
+## libusb hidapi macos arm64
+####################################################################
+
+% uname -a                                 
+Darwin hobo.local 22.5.0 Darwin Kernel Version 22.5.0: Thu Jun  8 22:22:19 PDT 2023; root:xnu-8796.121.3~7/RELEASE_ARM64_T8103 arm64
+
+$ brew install hidapi
+
+$ ls /opt/homebrew/Cellar/hidapi/0.14.0 
+AUTHORS.txt             LICENSE-bsd.txt         LICENSE-orig.txt        README.md               include
+INSTALL_RECEIPT.json    LICENSE-gpl3.txt        LICENSE.txt             bin                     lib
+
+$ ls /opt/homebrew/Cellar/hidapi/0.14.0/include 
+hidapi
+
+ls /opt/homebrew/Cellar/hidapi/0.14.0/include/hidapi 
+hidapi.h        hidapi_darwin.h
+
+$ ls /opt/homebrew/Cellar/hidapi/0.14.0/bin    
+hidtest
+
+$ ls /opt/homebrew/Cellar/hidapi/0.14.0/lib
+cmake                   libhidapi.0.14.0.dylib  libhidapi.0.dylib       libhidapi.dylib         pkgconfig
+
+####################################################################
+## libusb hidapi macos x86_64
+####################################################################
+
+$ uname -a
+Darwin robo.local 22.5.0 Darwin Kernel Version 22.5.0: Mon Apr 24 20:51:50 PDT 2023; root:xnu-8796.121.2~5/RELEASE_X86_64 x86_64
+
+$ brew install hidapi
+
+$ ls /usr/local/Cellar/hidapi/0.14.0
+AUTHORS.txt             LICENSE-bsd.txt         LICENSE-orig.txt        README.md               include
+INSTALL_RECEIPT.json    LICENSE-gpl3.txt        LICENSE.txt             bin                     lib
+
+$ ls /usr/local/Cellar/hidapi/0.14.0/include
+hidapi
+
+$ ls /usr/local/Cellar/hidapi/0.14.0/include/hidapi
+hidapi.h        hidapi_darwin.h
+
+$ ls /usr/local/Cellar/hidapi/0.14.0/bin
+hidtest
+
+$ ls /usr/local/Cellar/hidapi/0.14.0/lib
+cmake                   libhidapi.0.14.0.dylib  libhidapi.0.dylib       libhidapi.dylib         pkgconfig
+
+####################################################################
+## hidapi sources
+####################################################################
+
+$ mkdir ~/src/github.com/libusb
+$ cd ~/src/github.com/libusb
+$ git clone https://github.com/libusb/hidapi.git
+
+####################################################################
+## mcp2221a
+####################################################################
+
+$ cd ~/src/github.com/wirelessfabric/i2c
+$ make hid
+
+$ ./mcp2221a/scan_i2c_hid
+i2c_scan(0x30): ACK
+i2c_scan(0x31): ACK
+i2c_scan(0x32): ACK
+i2c_scan(0x33): ACK
+i2c_scan(0x34): ACK
+i2c_scan(0x38): ACK
+i2c_scan(0x49): ACK
+i2c_scan(0x4c): ACK
+i2c_scan(0x5e): ACK
+i2c_scan(0x77): ACK
+
+$ ./adafruit/neorotary_i2c_hid --i2c_addr=0x38
+Position: 0
+Button: Released
+Position: -1
+Position: -2
+Position: -3
+Position: -2
+Position: -1
+Button: Pressed
+Button: Released
+^C
+
+$ ./adafruit/neorotary1x4_i2c_hid             
+Position A: 0
+Position B: 0
+Position C: 0
+Position D: 0
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Button A: Pressed
+Button A: Released
+Button B: Pressed
+Button B: Released
+Button C: Pressed
+Button C: Released
+Button D: Pressed
+Button D: Released
+^C
+
+$ ./adafruit/neokey1x4_i2c_hid   
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Button D: Pressed
+Button D: Released
+Button C: Pressed
+Button C: Released
+Button C: Pressed
+Button C: Released
+Button A: Pressed
+Button A: Released
+^C
+
+$ ./adafruit/neoslider_i2c_hid --i2c_addr=0x31
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x0001 (1)
+Slider: 0x002a (42)
+Slider: 0x004a (74)
+Slider: 0x0061 (97)
+Slider: 0x0079 (121)
+Slider: 0x0098 (152)
+Slider: 0x00a9 (169)
+Slider: 0x00ad (173)
+Slider: 0x00ac (172)
+Slider: 0x00a9 (169)
+Slider: 0x009e (158)
+Slider: 0x0087 (135)
+Slider: 0x0057 (87)
+Slider: 0x002a (42)
+Slider: 0x000a (10)
+Slider: 0x0000 (0)
+^C
+
+$ ./adafruit/neoslider_i2c_hid --i2c_addr=0x32
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x000e (14)
+Slider: 0x003d (61)
+Slider: 0x005c (92)
+Slider: 0x006f (111)
+Slider: 0x007b (123)
+Slider: 0x0088 (136)
+Slider: 0x0094 (148)
+Slider: 0x0098 (152)
+Slider: 0x0099 (153)
+Slider: 0x0098 (152)
+Slider: 0x0092 (146)
+Slider: 0x0082 (130)
+Slider: 0x005c (92)
+Slider: 0x002c (44)
+Slider: 0x000c (12)
+Slider: 0x0003 (3)
+Slider: 0x0000 (0)
+^C
+
+$ ./adafruit/neoslider_i2c_hid --i2c_addr=0x33
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x0009 (9)
+Slider: 0x0041 (65)
+Slider: 0x0071 (113)
+Slider: 0x0094 (148)
+Slider: 0x00b4 (180)
+Slider: 0x00d5 (213)
+Slider: 0x00e6 (230)
+Slider: 0x00eb (235)
+Slider: 0x00e7 (231)
+Slider: 0x00cf (207)
+Slider: 0x00a0 (160)
+Slider: 0x0053 (83)
+Slider: 0x002d (45)
+Slider: 0x002c (44)
+Slider: 0x0027 (39)
+Slider: 0x001c (28)
+Slider: 0x0018 (24)
+Slider: 0x0000 (0)
+^C
+
+$ ./adafruit/neoslider_i2c_hid --i2c_addr=0x34
+ADC Status: 0xff
+Slider: 0x0000 (0)
+Slider: 0x0013 (19)
+Slider: 0x0029 (41)
+Slider: 0x0045 (69)
+Slider: 0x006f (111)
+Slider: 0x009c (156)
+Slider: 0x00bc (188)
+Slider: 0x00d0 (208)
+Slider: 0x00f1 (241)
+Slider: 0x0100 (256)
+Slider: 0x0101 (257)
+Slider: 0x00ff (255)
+Slider: 0x00ec (236)
+Slider: 0x00c0 (192)
+Slider: 0x0075 (117)
+Slider: 0x0012 (18)
+Slider: 0x0000 (0)
+^C
+
+$ ./bme280/bme280_i2c_hid 
+Temperature: 20.49 C 68.88 F
+Humidity: 57.57 %
+Pressure: 971.62 hPa
+Altitude: 352.50 meters
+
+Temperature: 20.50 C 68.90 F
+Humidity: 57.56 %
+Pressure: 971.63 hPa
+Altitude: 352.43 meters
+
+^C
+
+$ ./emc2101/emc2101_i2c_hid                                                                                                                                   
+External Temperature:  20.75 C  69.35 F
+Internal Temperature:  20.00 C  68.00 F
+
+External Temperature:  20.62 C  69.12 F
+Internal Temperature:  20.00 C  68.00 F
+
+^C
+
+% ./tlv493d/tlv493d_i2c_hid 
+X:   98.00      Y:  -98.00      Z:   98.00      T:  20.60 C  69.08 F
+X:    0.00      Y:  -98.00      Z:  -98.00      T:  20.60 C  69.08 F
+X:  -98.00      Y:  -98.00      Z:  196.00      T:  20.60 C  69.08 F
+X:  196.00      Y:    0.00      Z:   98.00      T:  20.60 C  69.08 F
+X:   98.00      Y:  -98.00      Z:   98.00      T:  21.70 C  71.06 F
+X:  196.00      Y:  -98.00      Z:   98.00      T:  20.60 C  69.08 F
+^C
+
+$ ./tlv493d/tlv493d_i2c_hid
+X:    0.00      Y:    0.00      Z:  -98.00      T:  20.60 C  69.08 F
+X:  196.00      Y:  -98.00      Z:    0.00      T:  20.60 C  69.08 F
+X:   98.00      Y:    0.00      Z:    0.00      T:  21.70 C  71.06 F
+X:   98.00      Y:  196.00      Z:   98.00      T:  22.80 C  73.04 F
+X:   98.00      Y: -196.00      Z:   98.00      T:  19.50 C  67.10 F
+X:   98.00      Y:  -98.00      Z:  196.00      T:  20.60 C  69.08 F
+X:  196.00      Y: -196.00      Z:  -98.00      T:  20.60 C  69.08 F
+X:  196.00      Y:    0.00      Z:  -98.00      T:  21.70 C  71.06 F
+X:  490.00      Y: -196.00      Z:    0.00      T:  21.70 C  71.06 F
+X:    0.00      Y:  -98.00      Z:    0.00      T:  21.70 C  71.06 F
+X:  294.00      Y:    0.00      Z:    0.00      T:  21.70 C  71.06 F
+X:  294.00      Y:    0.00      Z:   98.00      T:  20.60 C  69.08 F
+X:    0.00      Y:  -98.00      Z:  -98.00      T:  20.60 C  69.08 F
+X:    0.00      Y: -196.00      Z:   98.00      T:  22.80 C  73.04 F
+X:   98.00      Y:    0.00      Z:   98.00      T:  21.70 C  71.06 F
+X:   98.00      Y:  -98.00      Z:   98.00      T:  20.60 C  69.08 F
+X:    0.00      Y:  196.00      Z:    0.00      T:  21.70 C  71.06 F
+X:   98.00      Y:    0.00      Z:  -98.00      T:  21.70 C  71.06 F
+X:   98.00      Y:  -98.00      Z:   98.00      T:  21.70 C  71.06 F
+X:   98.00      Y: -196.00      Z:    0.00      T:  22.80 C  73.04 F
+X:  294.00      Y:   98.00      Z:    0.00      T:  22.80 C  73.04 F
+X:  -98.00      Y: -196.00      Z:    0.00      T:  21.70 C  71.06 F
+X:   98.00      Y: -196.00      Z:    0.00      T:  21.70 C  71.06 F
+^C
