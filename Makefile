@@ -82,6 +82,7 @@ HID_LDFLAGS += $(LDFLAGS)
 HID_EXE := bme280/bme280_i2c_hid
 HID_EXE += emc2101/emc2101_i2c_hid
 HID_EXE += tlv493d/tlv493d_i2c_hid
+HID_EXE += pimoroni/buttonshim_i2c_hid
 HID_EXE += adafruit/neokey1x4_i2c_hid
 HID_EXE += adafruit/neoslider_i2c_hid
 HID_EXE += adafruit/neorotary_i2c_hid
@@ -134,8 +135,8 @@ emc2101/emc2101: emc2101/emc2101.c emc2101/emc2101.h $(I2C) $(I2C_INC)
 lc709203f/lc709203f: lc709203f/lc709203f.c lc709203f/lc709203f.h $(I2C) $(I2C_INC)
 	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
 
-pimoroni/buttonshim: pimoroni/buttonshim.c pimoroni/buttonshim.h $(I2C) $(I2C_INC) $(SEESAW_ENCODER)
-	$(CC) $(CFLAGS) $< $(I2C) $(SEESAW_ENCODER) $(LDFLAGS) -o $@
+pimoroni/buttonshim: pimoroni/buttonshim.c pimoroni/buttonshim.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
 
 pisugar3/pisugar3: pisugar3/pisugar3.c pisugar3/pisugar3.h $(I2C) $(I2C_INC)
 	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
@@ -158,15 +159,6 @@ mcp2221a/mcp2221a_hid.o: mcp2221a/mcp2221a_hid.c $(HID_INC)
 mcp2221a/scan_i2c_hid: mcp2221a/mcp2221a_scan.c $(HID) $(HID_INC)
 	$(CC) $(HID_CFLAGS) $< $(HID) $(HID_LDFLAGS) -o $@
 
-bme280/bme280_i2c_hid: bme280/bme280.c bme280/bme280.h $(HID) $(HID_INC)
-	$(CC) $(HID_CFLAGS) bme280/bme280.c $(HID) $(HID_LDFLAGS) -lm -o $@
-
-emc2101/emc2101_i2c_hid: emc2101/emc2101.c emc2101/emc2101.h $(HID) $(HID_INC)
-	$(CC) $(HID_CFLAGS) emc2101/emc2101.c $(HID) $(HID_LDFLAGS) -o $@
-
-tlv493d/tlv493d_i2c_hid: tlv493d/tlv493d.c tlv493d/tlv493d.h $(HID) $(HID_INC)
-	$(CC) $(HID_CFLAGS) tlv493d/tlv493d.c $(HID) $(HID_LDFLAGS) -o $@
-
 adafruit/neokey1x4_i2c_hid: adafruit/neokey1x4.c $(HID) $(HID_INC) $(SEESAW_ADC)
 	$(CC) $(HID_CFLAGS) $< $(HID) $(SEESAW_ADC) $(HID_LDFLAGS) -o $@
 
@@ -179,8 +171,21 @@ adafruit/neorotary_i2c_hid: adafruit/neorotary.c $(HID) $(HID_INC) $(SEESAW_ENCO
 adafruit/neorotary1x4_i2c_hid: adafruit/neorotary1x4.c $(HID) $(HID_INC) $(SEESAW_ENCODER)
 	$(CC) $(HID_CFLAGS) $< $(HID) $(SEESAW_ENCODER) $(HID_LDFLAGS) -o $@
 
+bme280/bme280_i2c_hid: bme280/bme280.c bme280/bme280.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) bme280/bme280.c $(HID) $(HID_LDFLAGS) -lm -o $@
+
+emc2101/emc2101_i2c_hid: emc2101/emc2101.c emc2101/emc2101.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) emc2101/emc2101.c $(HID) $(HID_LDFLAGS) -o $@
+
+tlv493d/tlv493d_i2c_hid: tlv493d/tlv493d.c tlv493d/tlv493d.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) tlv493d/tlv493d.c $(HID) $(HID_LDFLAGS) -o $@
+
+pimoroni/buttonshim_i2c_hid: pimoroni/buttonshim.c pimoroni/buttonshim.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) tlv493d/tlv493d.c $(HID) $(HID_LDFLAGS) -o $@
+
 clean:
 	rm -rf adafruit/*.o adafruit/*.dSYM
+	rm -rf pimoroni/*.o pimoroni/*.dSYM
 	rm -rf font/*.o font/*.dSYM
 	rm -rf framebuffer/*.o,framebuffer/*.dSYM
 	rm -rf mcp2221a/*.o mcp2221a/*.dSYM

@@ -15,7 +15,7 @@
 #include "buttonshim.h"
 
 static int buttonshim_set(void* context, int reg, uint8_t value) {
-    int result = smbus_write_reg_u8(context, reg, value);
+    int result = i2c_write_reg_u8(context, reg, value);
     if (result < 0 && i2c_debug(context))
         printf("buttonshim_set: result %d\n", result);
     return result;
@@ -34,7 +34,7 @@ static int buttonshim_set_output(void* context, uint8_t value) {
 }
 
 static int buttonshim_get(void* context, int reg, uint8_t* value) {
-    int result = smbus_read_reg_u8(context, reg, value);
+    int result = i2c_read_reg_u8(context, reg, value);
     if (result < 0 && i2c_debug(context))
         printf("buttonshim_get: result %d\n", result);
     return result;
