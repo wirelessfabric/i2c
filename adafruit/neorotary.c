@@ -57,7 +57,7 @@ static void loop(void* context) {
             }
         }
 
-        i2c_sleep(1000);
+        i2c_sleep(5000);
     }
 }
 

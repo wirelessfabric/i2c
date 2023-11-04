@@ -56,7 +56,7 @@ static void loop(void* context) {
                 neo_show(context);
             }
         }
-        i2c_sleep(1000);
+        i2c_sleep(5000);
     }
 }
 

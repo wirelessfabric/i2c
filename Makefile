@@ -96,6 +96,7 @@ I2C_EXE += adafruit/neokey1x4
 I2C_EXE += adafruit/neoslider
 I2C_EXE += adafruit/neorotary
 I2C_EXE += adafruit/neorotary1x4
+I2C_EXE += pimoroni/buttonshim
 I2C_EXE += pisugar3/pisugar3
 
 FRAMEBUFFER_EXE := ssd1306/ssd1306
@@ -112,21 +113,6 @@ i2c: $(I2C_EXE)
 
 hid: $(HID_EXE)
 
-bme280/bme280: bme280/bme280.c bme280/bme280.h $(I2C) $(I2C_INC)
-	$(CC) $(CFLAGS) $< $(I2C) -lm $(LDFLAGS) -o $@
-
-emc2101/emc2101: emc2101/emc2101.c emc2101/emc2101.h $(I2C) $(I2C_INC)
-	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
-
-lc709203f/lc709203f: lc709203f/lc709203f.c lc709203f/lc709203f.h $(I2C) $(I2C_INC)
-	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
-
-tlv493d/tlv493d: tlv493d/tlv493d.c tlv493d/tlv493d.h $(I2C) $(I2C_INC)
-	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
-
-pisugar3/pisugar3: pisugar3/pisugar3.c pisugar3/pisugar3.h $(I2C) $(I2C_INC)
-	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
-
 adafruit/neokey1x4: adafruit/neokey1x4.c $(I2C) $(I2C_INC) $(SEESAW_ADC)
 	$(CC) $(CFLAGS) $< $(I2C) $(SEESAW_ADC) $(LDFLAGS) -o $@
 
@@ -139,8 +125,26 @@ adafruit/neorotary: adafruit/neorotary.c $(I2C) $(I2C_INC) $(SEESAW_ENCODER)
 adafruit/neorotary1x4: adafruit/neorotary1x4.c $(I2C) $(I2C_INC) $(SEESAW_ENCODER)
 	$(CC) $(CFLAGS) $< $(I2C) $(SEESAW_ENCODER) $(LDFLAGS) -o $@
 
+bme280/bme280: bme280/bme280.c bme280/bme280.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) -lm $(LDFLAGS) -o $@
+
+emc2101/emc2101: emc2101/emc2101.c emc2101/emc2101.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
+
+lc709203f/lc709203f: lc709203f/lc709203f.c lc709203f/lc709203f.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
+
+pimoroni/buttonshim: pimoroni/buttonshim.c pimoroni/buttonshim.h $(I2C) $(I2C_INC) $(SEESAW_ENCODER)
+	$(CC) $(CFLAGS) $< $(I2C) $(SEESAW_ENCODER) $(LDFLAGS) -o $@
+
+pisugar3/pisugar3: pisugar3/pisugar3.c pisugar3/pisugar3.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
+
 ssd1306/ssd1306: ssd1306/ssd1306.c $(FONT) $(FRAMEBUFFER)
 	$(CC) $(CFLAGS) -Iframebuffer -Ifont $< $(FRAMEBUFFER) $(FONT) -lm $(LDFLAGS) -o $@
+
+tlv493d/tlv493d: tlv493d/tlv493d.c tlv493d/tlv493d.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
 
 io/i2c_hid_io.o: io/i2c_hid_io.c $(HID_INC)
 	$(CC) $(HID_CFLAGS) -c $< -o $@
@@ -188,6 +192,8 @@ clean:
 ssd1306: ssd1306/ssd1306
 
 lc709203f: lc709203f/lc709203f
+
+buttonshim: pimoroni/buttonshim
 
 pisugar3: pisugar3/pisugar3
 

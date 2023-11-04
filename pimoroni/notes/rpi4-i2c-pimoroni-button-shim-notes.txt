@@ -6,7 +6,6 @@
 ## Pimoroni Button SHIM for Raspberry Pi
 ##############################################################################################################
 ##
-## See: https://learn.adafruit.com/adafruit-lc709203f-lipo-lipoly-battery-monitor/python-circuitpython
 ## See: https://www.adafruit.com/product/3582
 ## See: https://pinout.xyz/pinout/button_shim
 ##
@@ -26,7 +25,7 @@ Release:        11
 Codename:       bullseye
 
 ####################################################################
-## i2c-tools device 0x0b
+## i2c-tools device 0x3f
 ####################################################################
 
 $ ls /dev/i2c*
