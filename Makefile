@@ -185,7 +185,10 @@ pimoroni/buttonshim_i2c_hid: pimoroni/buttonshim.c pimoroni/buttonshim.h $(HID) 
 
 clean:
 	rm -rf adafruit/*.o adafruit/*.dSYM
+	rm -rf adafruit/*.o adafruit/*.dSYM
+	rm -rf emc2101/*.o emc2101/*.dSYM
 	rm -rf pimoroni/*.o pimoroni/*.dSYM
+	rm -rf tlv493d/*.o tlv493d/*.dSYM
 	rm -rf font/*.o font/*.dSYM
 	rm -rf framebuffer/*.o,framebuffer/*.dSYM
 	rm -rf mcp2221a/*.o mcp2221a/*.dSYM
