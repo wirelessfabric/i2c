@@ -198,8 +198,6 @@ ssd1306: ssd1306/ssd1306
 
 lc709203f: lc709203f/lc709203f
 
-buttonshim: pimoroni/buttonshim
-
 pisugar3: pisugar3/pisugar3
 
 mcp2221a: mcp2221a/scan_i2c_hid
@@ -207,6 +205,8 @@ mcp2221a: mcp2221a/scan_i2c_hid
 bme280: bme280/bme280 bme280/bme280_i2c_hid
 
 emc2101: emc2101/emc2101 emc2101/emc2101_i2c_hid
+
+buttonshim: pimoroni/buttonshim pimoroni/buttonshim_i2c_hid
 
 tlv493d: tlv493d/tlv493d tlv493d/tlv493d_i2c_hid
 

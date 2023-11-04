@@ -41,6 +41,8 @@ Bus Pirate v3.6 by Dangerous Prototypes
 
 <img src="./images/IMG_20231101_214646039.jpg" width="500">
 
+<img src="./images/IMG_20231103_205805973.jpg" width="500">
+
 ### Installing Linux Packages
 
 Install libi2c-dev, i2c-tools, xz-utils, libusb-dev, and libhidapi-dev.
@@ -160,6 +162,7 @@ $ make dbg=1
 $ make bme280
 $ make emc2101
 $ make lc709203f
+$ make buttonshim
 $ make tlv493d
 $ make pisugar3
 $ make neokey1x4 
@@ -219,6 +222,20 @@ Current Direction: Auto Mode
 Power Mode: Sleep
 Temperature Sensing Method: I2C
 
+^C
+```
+
+```
+$ pimoroni/buttonshim 
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Button E: Released
+Button A: Pressed
+Button A: Released
+Button B: Pressed
+Button B: Released
 ^C
 ```
 
