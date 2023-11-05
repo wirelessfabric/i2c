@@ -21,6 +21,8 @@ Adafruit MCP2221A Breakout General Purpose USB to I2C GPIO ADC
 HiLetgo DS3231 I2C High Precision RTC
 Hosyond 0.96" OLED I2C 128x64 SSD1306 OLED Screen
 
+Sparkfun Qwiic Adapter
+
 Pimoroni Button SHIM for Raspberry Pi
 Pimoroni HyperPixel 4.0" Touchscreen
 
@@ -42,6 +44,9 @@ Bus Pirate v3.6 by Dangerous Prototypes
 <img src="./images/IMG_20231101_214646039.jpg" width="500">
 
 <img src="./images/IMG_20231103_205805973.jpg" width="500">
+
+<img src="./images/IMG_20231105_012556815.jpg" width="500">
+
 
 ### Installing Linux Packages
 
