@@ -47,7 +47,7 @@ Bus Pirate v3.6 by Dangerous Prototypes
 
 <img src="./gallery/IMG_20231103_205805973.jpg" width="500">
 
-<img src="./gallery/IMG_20231105_012556815.jpg" width="500">
+<img src="./gallery/IMG_20231105_100018259.jpg" width="500">
 
 
 ### Installing Linux Packages
