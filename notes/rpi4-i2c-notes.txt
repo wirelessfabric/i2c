@@ -133,6 +133,24 @@ $ sudo i2cdetect -y 22
 70: -- -- -- -- -- -- -- --                         
 
 ##
+## Enable i2c3
+## See: https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README
+##
+## QT blue   SDA3 pin 7  GPIO 4
+## QT yellow SCL3 pin 29 GPIO 5
+## QT red    3.3V pin 17
+## QT black  GND  pin 20
+##
+
+$ sudo vi /boot/config.txt
+:::
+dtparam=i2c_arm=on
+#dtparam=i2s=on
+#dtparam=spi=on
+dtoverlay=i2c3,pins_4_5
+:::
+
+##
 ## Enable i2c4
 ## See: https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README
 ##
