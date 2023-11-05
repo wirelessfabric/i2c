@@ -56,8 +56,8 @@ tmpfs           384M   21k  384M   1% /run/user/1000
 ## i2c1 enabled by default
 ## See: https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README
 ##
-## 3.3V pin 1          QT red
-## GND  pin 6          QT black
+## 3.3V pin 17         QT red
+## GND  pin 20         QT black
 ## SDA1 pin 3  GPIO 2  QT blue  
 ## SCL1 pin 5  GPIO 3  QT yellow
 ##
