@@ -9,7 +9,7 @@
 # nmake /f Makefile.mak clean
 # nmake /f Makefile.mak
 
-HIDAPI = C:\src\github.com\libusb\hidapi
+HIDAPI = ..\..\libusb\hidapi
 
 CFLAGS = /nologo /Oi /W3 /D "WIN32" /D "_WINDOWS" /D "CONFIG_I2C_HID_IO"
 CFLAGS = $(CFLAGS) /EHsc /std:c17 /Iio /Imcp2221a
