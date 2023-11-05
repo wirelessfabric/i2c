@@ -1,5 +1,5 @@
 # i2c
-Example code, notes, and picture gallery about accessing I2C devices from userspace on Raspberry Pi, Ubunutu x86_64, macOS, and Windows 11.
+Example code, notes, and picture gallery about accessing I2C devices from userspace on Raspberry Pi OS, Ubunutu Linux, macOS, and Windows 11.
 
 All code in this repository is written in C and licensed under the MIT license (see [LICENSE](LICENSE)).
 ```
@@ -21,7 +21,9 @@ Adafruit MCP2221A Breakout General Purpose USB to I2C GPIO ADC
 HiLetgo DS3231 I2C High Precision RTC
 Hosyond 0.96" OLED I2C 128x64 SSD1306 OLED Screen
 
-Sparkfun Qwiic Adapter
+Sparkfun Qwiic Breadboard Breakout Adapter
+Sparkfun Qwiic Multiport
+Sparkfun Qwiic SHIM for Raspberry Pi
 
 Pimoroni Button SHIM for Raspberry Pi
 Pimoroni HyperPixel 4.0" Touchscreen
