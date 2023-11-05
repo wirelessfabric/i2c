@@ -1,5 +1,5 @@
 # i2c
-Example code and notes on accessing I2C devices from Linux userspace on Raspberry Pi, Ubunutu x86_64, macOS, and Windows 11.
+Example code, notes, and picture gallery about accessing I2C devices from userspace on Raspberry Pi, Ubunutu x86_64, macOS, and Windows 11.
 
 All code in this repository is written in C and licensed under the MIT license (see [LICENSE](LICENSE)).
 ```
@@ -31,21 +31,21 @@ PiSugar 3 UPS HAT
 Bus Pirate v3.6 by Dangerous Prototypes
 ```
 
-<img src="./images/IMG_20230809_192238078.jpg" width="500">
+<img src="./gallery/IMG_20230809_192238078.jpg" width="500">
 
-<img src="./images/IMG_20230809_192322834.jpg" width="500">
+<img src="./gallery/IMG_20230809_192322834.jpg" width="500">
 
-<img src="./images/IMG_20230823_204618203.jpg" width="500">
+<img src="./gallery/IMG_20230823_204618203.jpg" width="500">
 
-<img src="./images/IMG_20231005_222247762.jpg" width="500">
+<img src="./gallery/IMG_20231005_222247762.jpg" width="500">
 
-<img src="./images/IMG_20231017_212401856.jpg" width="500">
+<img src="./gallery/IMG_20231017_212401856.jpg" width="500">
 
-<img src="./images/IMG_20231101_214646039.jpg" width="500">
+<img src="./gallery/IMG_20231101_214646039.jpg" width="500">
 
-<img src="./images/IMG_20231103_205805973.jpg" width="500">
+<img src="./gallery/IMG_20231103_205805973.jpg" width="500">
 
-<img src="./images/IMG_20231105_012556815.jpg" width="500">
+<img src="./gallery/IMG_20231105_012556815.jpg" width="500">
 
 
 ### Installing Linux Packages
