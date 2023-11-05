@@ -6,8 +6,8 @@
 
 # usage:
 # %comspec% /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-# nmake /f Makefile.mak clean
-# nmake /f Makefile.mak
+# nmake.exe /f Makefile.mak clean
+# nmake.exe /f Makefile.mak
 
 HIDAPI = ..\..\libusb\hidapi
 
