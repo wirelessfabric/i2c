@@ -26,6 +26,10 @@
 ## See: https://github.com/libusb/hidapi.git
 ## See: https://github.com/gregkh/usbutils.git
 ## See: https://github.com/todbot/hidapitester.git
+##
+## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
+##      https://www.youtube.com/watch?v=lANtyWHzZCo
+##
 
 $ sudo apt update
 $ sudo apt upgrade
