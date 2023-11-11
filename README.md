@@ -1,7 +1,8 @@
 # i2c
 Example code, notes, and picture gallery about accessing I2C devices from userspace on Raspberry Pi OS, Ubunutu Linux, macOS, and Windows 11.
 
-All code in this repository is written in C and licensed under the MIT license (see [LICENSE](LICENSE)).
+All code in this repository is written in C.
+All code and notes in this repository are licensed under the MIT license (see [LICENSE](LICENSE)).
 ```
 Adafruit I2C Stemma QT NeoKey 1x4 - Four Mechanical Key Switches with NeoPixels
 Adafruit I2C Stemma QT Rotary Encoder Breakout with NeoPixel
