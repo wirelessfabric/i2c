@@ -33,3 +33,6 @@
 ## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
 ##      https://www.youtube.com/watch?v=lANtyWHzZCo
 ##
+## See: Creating an udev rule for rootless access to USB devices
+##      https://www.youtube.com/watch?v=7mffD4rAsZs
+##
