@@ -1,0 +1,35 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## CP2112 - Silicon Labs HID USB to SMBus/I2C Bridge Chip
+#######################################################################
+##
+## Silicon Labs CP2112 HID USB to SMBus/I2C Bridge Chip
+## See: https://www.silabs.com/interface/usb-bridges/classic/device.cp2112
+## See: https://www.silabs.com/documents/public/data-sheets/cp2112-datasheet.pdf
+## See: https://www.silabs.com/development-tools/interface/cp2112ek-development-kit
+## See: https://www.silabs.com/documents/public/user-guides/CP2112-EK.pdf
+## See: https://www.silabs.com/documents/public/quick-start-guides/CP2112-EK-QS-Guide.pdf
+## See: https://www.silabs.com/documents/public/application-notes/an496-hid-usb-to-smbus-api-specification.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN721.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN532.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN335.pdf
+## See: https://www.silabs.com/documents/public/application-notes/an1415-current_leakage_through_ceramic_capacitors.pdf
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Linux.txt
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Win.txt
+## See: https://www.silabs.com/documents/public/application-notes/an220-usb-driver-customization.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN169.pdf
+## See: https://www.silabs.com/documents/public/release-notes/CP210x_VCP_Windows_XP_Vista_Release_Notes.txt
+## See: https://www.silabs.com/documents/public/release-notes/v6-7-4-driver-release-notes.txt
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Mac.txt
+## See: https://www.silabs.com/documents/public/application-notes/Mac_OSX_VCP_Driver_10_6_Release_Notes.txt
+## See: https://www.silabs.com/documents/public/release-notes/Mac_OSX_VCP_Driver_Release_Notes.txt
+##
+## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
+##      https://www.youtube.com/watch?v=lANtyWHzZCo
+##
