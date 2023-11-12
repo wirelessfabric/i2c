@@ -22,12 +22,12 @@ int mcp2221a_i2c_command(context* context, int command, uint8_t* buffer) {
     buffer[I2C_COMMAND] = command;
 
     if (i2c_dump(context))
-        i2c_dump_buffer(context, "i2c command >", &buffer[I2C_COMMAND], I2C_DUMP_SIZE);
+        i2c_dump_buffer(context, "i2c_command >", &buffer[I2C_COMMAND], I2C_DUMP_SIZE);
 
     int result = mcp2221a_hid_transfer(context, buffer);
 
     if (i2c_dump(context))
-        i2c_dump_buffer(context, "i2c command <", &buffer[I2C_RESPONSE], I2C_DUMP_SIZE);
+        i2c_dump_buffer(context, "i2c_command <", &buffer[I2C_RESPONSE], I2C_DUMP_SIZE);
 
     if (result < 0) {
         if (i2c_debug(context))
