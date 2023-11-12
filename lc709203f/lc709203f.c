@@ -40,21 +40,13 @@ static uint8_t lc709203f_crc8(uint8_t *data, size_t size) {
 }
 
 static int lc709203f_set(void* context, int reg, uint16_t value) {
-    uint8_t buffer[5] = {0};
-    size_t crc_size = sizeof(buffer) - sizeof(buffer[4]);
-    buffer[0] = i2c_addr(context) << 1;
-    buffer[1] = reg;
-    buffer[2] = value & 0xFF;
-    buffer[3] = value >> 8;
-    buffer[4] = lc709203f_crc8(buffer, crc_size);
-
-    uint8_t* command = &buffer[1];
-    size_t send_size = sizeof(buffer) - sizeof(buffer[0]);
-
-    if (i2c_dump(context))
-        i2c_dump_buffer(context, "> ", command, send_size);
-
-    return i2c_write(context, command, send_size);
+    uint8_t command[5] = {0};
+    command[0] = i2c_addr(context) << 1;
+    command[1] = reg;
+    command[2] = value & 0xFF;
+    command[3] = value >> 8;
+    command[4] = lc709203f_crc8(command, sizeof(command) - sizeof(command[4]));
+    return i2c_write(context, &command[1], sizeof(command) - sizeof(command[0]));
 }
 
 static int lc709203f_set_power_mode(void* context, uint16_t mode) {

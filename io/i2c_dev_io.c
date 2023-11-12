@@ -75,11 +75,16 @@ int i2c_read(context* context, void* data, size_t size) {
     }
 
     size_t result = read(context->i2c.dev, data, size);
+
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c_read  < ", data, size);
+
     if (result == size)
         return I2C_SUCCESS;
 
     if (i2c_debug(context))
         printf("i2c_read() result %d\n", (int)result);
+
     return I2C_READ_SIZE_ERROR;
 }
 
@@ -90,12 +95,16 @@ int i2c_write(context* context, void* data, size_t size) {
         return I2C_DATA_PARAMETER_ERROR;
     }
 
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c_write > ", data, size);
+
     size_t result = write(context->i2c.dev, data, size);
     if (result == size)
         return I2C_SUCCESS;
 
     if (i2c_debug(context))
         printf("i2c_write() result %d\n", (int)result);
+
     return I2C_WRITE_SIZE_ERROR;
 }
 
@@ -112,6 +121,10 @@ int i2c_read_module(context* context, int base, int reg, void* data, size_t size
     uint8_t command[2];
     command[0] = (uint8_t)base;
     command[1] = (uint8_t)reg;
+
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c write > ", command, sizeof(command));
+
     size_t result = write(context->i2c.dev, command, sizeof(command));
     if (result != sizeof(command)) {
         if (i2c_debug(context))
@@ -123,12 +136,17 @@ int i2c_read_module(context* context, int base, int reg, void* data, size_t size
     i2c_transfer_delay(context);
 
     result = read(context->i2c.dev, data, size);
+
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c read  < ", data, size);
+
     if (result == size)
         return I2C_SUCCESS;
 
     if (i2c_debug(context))
         printf("i2c_read_module(0x%02x,0x%02x) read result %d\n",
                base, reg, (int)result);
+
     return I2C_READ_ERROR;
 }
 
@@ -141,8 +159,13 @@ int i2c_read_reg(context* context, int reg, void* data, size_t size) {
         return I2C_DATA_PARAMETER_ERROR;
     }
 
-    uint8_t command = (uint8_t)reg;
-    size_t result = write(context->i2c.dev, &command, sizeof(command));
+    uint8_t command[1];
+    command[0] = (uint8_t)reg;
+
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c write > ", command, sizeof(command));
+
+    size_t result = write(context->i2c.dev, command, sizeof(command));
     if (result != sizeof(command)) {
         if (i2c_debug(context))
             printf("i2c_read_reg(0x%02x) write result %d\n", reg, (int)result);
@@ -152,11 +175,16 @@ int i2c_read_reg(context* context, int reg, void* data, size_t size) {
     i2c_transfer_delay(context);
 
     result = read(context->i2c.dev, data, size);
+
+    if (i2c_dump(context))
+        i2c_dump_buffer(context, "i2c read  < ", data, size);
+
     if (result == size)
         return I2C_SUCCESS;
 
     if (i2c_debug(context))
         printf("i2c_read_reg(0x%02x) read result %d\n", reg, (int)result);
+
     return I2C_READ_ERROR;
 }
 
@@ -176,12 +204,12 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
     }
 
     if (args->read_write == I2C_SMBUS_WRITE && i2c_dump(context))
-        i2c_dump_buffer(context, "> ", (uint8_t*)args->data, args->size);
+        i2c_dump_buffer(context, "smbus ioctl > ", (uint8_t*)args->data, args->size);
 
     int result = ioctl(context->i2c.dev, I2C_SMBUS, args);
 
     if (args->read_write == I2C_SMBUS_READ && i2c_dump(context))
-        i2c_dump_buffer(context, "< ", (uint8_t*)args->data, args->size);
+        i2c_dump_buffer(context, "smbus ioctl < ", (uint8_t*)args->data, args->size);
 
     if (result < 0) {
         if (i2c_debug(context))
