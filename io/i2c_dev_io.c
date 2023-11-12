@@ -179,14 +179,15 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
         i2c_dump_buffer(context, "> ", (uint8_t*)args->data, args->size);
 
     int result = ioctl(context->i2c.dev, I2C_SMBUS, args);
+
+    if (args->read_write == I2C_SMBUS_READ && i2c_dump(context))
+        i2c_dump_buffer(context, "< ", (uint8_t*)args->data, args->size);
+
     if (result < 0) {
         if (i2c_debug(context))
             printf("smbus_write_reg(0x%02x) ioctl result %d\n", reg, result);
         return I2C_SMBUS_TRANSFER_ERROR;
     }
-
-    if (args->read_write == I2C_SMBUS_READ && i2c_dump(context))
-        i2c_dump_buffer(context, "< ", (uint8_t*)args->data, args->size);
 
     return I2C_SUCCESS;
 }
