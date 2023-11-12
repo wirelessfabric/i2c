@@ -135,6 +135,6 @@ void i2c_set_dump(context* context, bool dump);
 void i2c_set_addr(context* context, int addr);
 void i2c_set_delay_usec(context* context, unsigned int usec);
 
-void i2c_dump_buffer(context* context, const char* text, uint8_t* buffer);
+void i2c_dump_buffer(context* context, const char* text, uint8_t* buffer, size_t size);
 
 #endif // I2C_IO_H

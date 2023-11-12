@@ -169,20 +169,10 @@ void i2c_set_delay_usec(context* context, unsigned int usec) {
     context->i2c.delay_usec = usec;
 }
 
-void i2c_dump_buffer(context* context, const char* text, uint8_t* buffer) {
+void i2c_dump_buffer(context* context, const char* text, uint8_t* buffer, size_t size) {
     (void)context;
-    printf("%s " \
-           "%02x %02x %02x %02x %02x %02x %02x %02x " \
-           "%02x %02x %02x %02x %02x %02x %02x %02x " \
-           "%02x %02x %02x %02x %02x %02x %02x %02x " \
-           "%02x %02x %02x %02x %02x %02x %02x %02x\n",
-           text,
-           buffer[0],  buffer[1],  buffer[2],  buffer[3],
-           buffer[4],  buffer[5],  buffer[6],  buffer[7],
-           buffer[8],  buffer[9],  buffer[10], buffer[11],
-           buffer[12], buffer[13], buffer[14], buffer[15],
-           buffer[16], buffer[17], buffer[18], buffer[19],
-           buffer[20], buffer[21], buffer[22], buffer[23],
-           buffer[24], buffer[25], buffer[26], buffer[27],
-           buffer[28], buffer[29], buffer[30], buffer[31]);
+    printf("%s ", text);
+    for (size_t i=0; i < size; i++)
+        printf("%02x ", buffer[i]);
+    printf("\n");
 }

@@ -176,7 +176,7 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
     }
 
     if (args->read_write == I2C_SMBUS_WRITE && i2c_dump(context))
-        i2c_dump_buffer(context, "> ", (uint8_t*)args->data);
+        i2c_dump_buffer(context, "> ", (uint8_t*)args->data, args->size);
 
     int result = ioctl(context->i2c.dev, I2C_SMBUS, args);
     if (result < 0) {
@@ -186,7 +186,7 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
     }
 
     if (args->read_write == I2C_SMBUS_READ && i2c_dump(context))
-        i2c_dump_buffer(context, "< ", (uint8_t*)args->data);
+        i2c_dump_buffer(context, "< ", (uint8_t*)args->data, args->size);
 
     return I2C_SUCCESS;
 }
