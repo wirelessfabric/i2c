@@ -1,0 +1,105 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## CP2112 - Silicon Labs HID USB to SMBus/I2C Bridge Chip
+#######################################################################
+##
+## Silicon Labs CP2112 HID USB to SMBus/I2C Bridge Chip
+## See: https://www.silabs.com/interface/usb-bridges/classic/device.cp2112
+## See: https://www.silabs.com/documents/public/data-sheets/cp2112-datasheet.pdf
+## See: https://www.silabs.com/development-tools/interface/cp2112ek-development-kit
+## See: https://www.silabs.com/documents/public/user-guides/CP2112-EK.pdf
+## See: https://www.silabs.com/documents/public/quick-start-guides/CP2112-EK-QS-Guide.pdf
+## See: https://www.silabs.com/documents/public/application-notes/an496-hid-usb-to-smbus-api-specification.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN721.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN532.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN335.pdf
+## See: https://www.silabs.com/documents/public/application-notes/an1415-current_leakage_through_ceramic_capacitors.pdf
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Linux.txt
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Win.txt
+## See: https://www.silabs.com/documents/public/application-notes/an220-usb-driver-customization.pdf
+## See: https://www.silabs.com/documents/public/application-notes/AN169.pdf
+## See: https://www.silabs.com/documents/public/release-notes/CP210x_VCP_Windows_XP_Vista_Release_Notes.txt
+## See: https://www.silabs.com/documents/public/release-notes/v6-7-4-driver-release-notes.txt
+##
+## See: https://www.silabs.com/documents/public/release-notes/ReleaseNotes-Mac.txt
+## See: https://www.silabs.com/documents/public/application-notes/Mac_OSX_VCP_Driver_10_6_Release_Notes.txt
+## See: https://www.silabs.com/documents/public/release-notes/Mac_OSX_VCP_Driver_Release_Notes.txt
+##
+## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
+##      https://www.youtube.com/watch?v=lANtyWHzZCo
+##
+## See: Creating an udev rule for rootless access to USB devices
+##      https://www.youtube.com/watch?v=7mffD4rAsZs
+##
+
+$ uname -a
+Linux soho 5.15.0-88-generic #98-Ubuntu SMP Mon Oct 2 15:18:56 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            11Gi       3.0Gi       2.1Gi        58Mi       6.6Gi       8.3Gi
+Swap:          1.0Gi          0B       1.0Gi
+
+$ df -H
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           1.3G  2.3M  1.3G   1% /run
+/dev/sda7       984G  249G  686G  27% /
+tmpfs           6.3G   56M  6.2G   1% /dev/shm
+tmpfs           5.3M  4.1k  5.3M   1% /run/lock
+tmpfs           6.3G     0  6.3G   0% /run/qemu
+/dev/sda2       269M   60M  210M  23% /boot/efi
+tmpfs           1.3G  164k  1.3G   1% /run/user/1000
+
+$ sudo dmesg | grep usb
+:::
+[48330.059676] usb 3-1.4: new full-speed USB device number 10 using xhci_hcd
+[48330.161332] usb 3-1.4: New USB device found, idVendor=10c4, idProduct=ea90, bcdDevice= 0.00
+[48330.161342] usb 3-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[48330.161347] usb 3-1.4: Product: CP2112 HID USB-to-SMBus Bridge
+[48330.161351] usb 3-1.4: Manufacturer: Silicon Laboratories
+[48330.161354] usb 3-1.4: SerialNumber: 00E13B90
+[48330.168959] cp2112 0003:10C4:EA90.0006: hidraw3: USB HID v1.01 Device [Silicon Laboratories CP2112 HID USB-to-SMBus Bridge] on usb-0000:00:14.0-1.4/input0
+[48330.227882] cp2112 0003:10C4:EA90.0006: Part Number: 0x0C Device Version: 0x03
+
+$ sudo lsusb
+:::
+Bus 003 Device 008: ID 10c4:ea90 Silicon Labs CP2112 HID I2C Bridge
+:::
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-2  /dev/i2c-3  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6  /dev/i2c-7  /dev/i2c-8
+
+$ sudo i2cdetect -l
+i2c-0   smbus           SMBus I801 adapter at f000              SMBus adapter
+i2c-1   i2c             NVIDIA i2c adapter 1 at 1:00.0          I2C adapter
+i2c-2   i2c             NVIDIA i2c adapter 2 at 1:00.0          I2C adapter
+i2c-3   i2c             NVIDIA i2c adapter 4 at 1:00.0          I2C adapter
+i2c-4   i2c             NVIDIA i2c adapter 6 at 1:00.0          I2C adapter
+i2c-5   i2c             NVIDIA i2c adapter 7 at 1:00.0          I2C adapter
+i2c-6   i2c             NVIDIA i2c adapter 8 at 1:00.0          I2C adapter
+i2c-7   i2c             NVIDIA i2c adapter 9 at 1:00.0          I2C adapter
+i2c-8   i2c             CP2112 SMBus Bridge on hidraw3          I2C adapter
+
+$ sudo i2cdetect -y 8
+Warning: Can't use SMBus Quick Write command, will skip some addresses
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                                                 
+10:                                                 
+20:                                                 
+30: -- -- -- -- -- -- -- --                         
+40:                                                 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60:                                                 
+70:                                                 
