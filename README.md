@@ -179,6 +179,7 @@ $ make neorotary
 $ make neorotary1x4
 $ make ssd1306
 $ make mcp2221a
+$ make buttonshim
 ```
 
 ### Running I2C example binaries
@@ -258,6 +259,17 @@ X:  196.00      Y:  -98.00      Z:    0.00      T:  21.70 C  71.06 F
 $ tlv493d/tlv493d_i2c_hid 
 X:  294.00      Y:  -98.00      Z:    0.00      T:  21.70 C  71.06 F
 X:   98.00      Y: -196.00      Z:  -98.00      T:  21.70 C  71.06 F
+^C
+```
+
+```
+$ pimoroni/buttonshim
+Button A: Released
+Button B: Released
+Button C: Released
+Button D: Released
+Button E: Released
+Button E: Pressed
 ^C
 ```
 
