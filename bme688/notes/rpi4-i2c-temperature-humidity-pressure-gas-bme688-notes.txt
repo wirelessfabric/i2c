@@ -1,0 +1,133 @@
+#######################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Adafruit BME680 I2C or SPI Temperature Humidity Pressure Gas Sensor
+#######################################################################
+##
+## Adafruit BME680 I2C or SPI Temperature Humidity Pressure Gas Sensor
+## See: https://www.adafruit.com/product/3660
+## See: https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/
+## See: https://github.com/adafruit/Adafruit_CircuitPython_BME680.git
+## See: https://github.com/adafruit/Adafruit_BME280_Library.git
+##
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ uname -a
+Linux rpi3 6.1.21-v7l+ #1642 SMP Mon Apr  3 17:22:30 BST 2023 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           1.8Gi       179Mi       1.2Gi        62Mi       427Mi       1.5Gi
+Swap:          2.0Gi          0B       2.0Gi
+
+$ df -H
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       126G   39G   82G  33% /
+devtmpfs        685M     0  685M   0% /dev
+tmpfs           955M     0  955M   0% /dev/shm
+tmpfs           382M  1.2M  381M   1% /run
+tmpfs           5.3M  4.1k  5.3M   1% /run/lock
+/dev/mmcblk0p1  265M   53M  212M  20% /boot
+tmpfs           191M   21k  191M   1% /run/user/1000
+
+####################################################################
+## i2c-tools device 0x77
+####################################################################
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-10  /dev/i2c-20  /dev/i2c-21  /dev/i2c-22  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6
+
+$ sudo i2cdetect -l
+i2c-1   i2c             bcm2835 (i2c@7e804000)                  I2C adapter
+i2c-21  i2c             fef09500.i2c                            I2C adapter
+i2c-6   i2c             bcm2835 (i2c@7e205c00)                  I2C adapter
+i2c-4   i2c             bcm2835 (i2c@7e205800)                  I2C adapter
+i2c-22  i2c             bcm2835 (i2c@7e205000)                  I2C adapter
+i2c-0   i2c             i2c-22-mux (chan_id 0)                  I2C adapter
+i2c-20  i2c             fef04500.i2c                            I2C adapter
+i2c-10  i2c             i2c-22-mux (chan_id 1)                  I2C adapter
+i2c-5   i2c             bcm2835 (i2c@7e205a00)                  I2C adapter
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- 13 -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- UU UU -- -- -- -- -- -- 
+30: -- -- -- -- -- -- 36 -- -- -- -- -- UU -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 5e -- 
+60: -- -- -- -- -- -- -- -- UU -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- 77                         
+
+####################################################################
+## Adafruit CircuitPython Blinka
+####################################################################
+
+## See: rpi4-circuitpython-blinka-notes.txt
+
+####################################################################
+## Adafruit CircuitPython library for Adafruit BME680
+## See: https://github.com/adafruit/Adafruit_CircuitPython_BME680.git
+####################################################################
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-10  /dev/i2c-20  /dev/i2c-21  /dev/i2c-22  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6
+
+$ sudo pip3 install adafruit-circuitpython-bme680
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: adafruit-circuitpython-bme680 in /usr/local/lib/python3.9/dist-packages (3.7.2)
+Requirement already satisfied: Adafruit-Blinka in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-bme680) (8.20.0)
+Requirement already satisfied: adafruit-circuitpython-busdevice in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-bme680) (5.2.6)
+Requirement already satisfied: rpi-ws281x>=4.0.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (5.0.0)
+Requirement already satisfied: adafruit-circuitpython-typing in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (1.9.4)
+Requirement already satisfied: pyftdi>=0.40.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (0.54.0)
+Requirement already satisfied: Adafruit-PureIO>=1.1.7 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (1.1.11)
+Requirement already satisfied: Adafruit-PlatformDetect>=3.13.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (3.47.0)
+Requirement already satisfied: sysv-ipc>=1.1.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (1.1.0)
+Requirement already satisfied: RPi.GPIO in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-bme680) (0.7.1)
+Requirement already satisfied: pyusb!=1.2.0,>=1.0.0 in /usr/local/lib/python3.9/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-bme680) (1.2.1)
+Requirement already satisfied: pyserial>=3.0 in /usr/lib/python3/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-bme680) (3.5b0)
+Requirement already satisfied: typing-extensions~=4.0 in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-typing->Adafruit-Blinka->adafruit-circuitpython-bme680) (4.7.1)
+Requirement already satisfied: adafruit-circuitpython-requests in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-typing->Adafruit-Blinka->adafruit-circuitpython-bme680) (2.0.0)
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_CircuitPython_BME680.git
+
+$ cd Adafruit_CircuitPython_BME680
+$ ls
+adafruit_bme680.py  CODE_OF_CONDUCT.md  docs  examples  LICENSE  LICENSES  optional_requirements.txt  pyproject.toml  README.rst  README.rst.license  requirements.txt
+
+$ cd examples
+$ ls
+bme680_simpletest.py  bme680_spi.py
+
+$ python3 bme680_simpletest.py 
+
+Temperature: 29.6 C
+Gas: 13372 ohm
+Humidity: 100.0 %
+Pressure: 624.578 hPa
+Altitude = 3899.42 meters
+^C
+
+####################################################################
+## Adafruit Arduino library for Adafruit BME680
+## See: https://github.com/adafruit/Adafruit_BME680.git
+####################################################################
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_BME680.git
