@@ -3,14 +3,16 @@
 ##
 ## SPDX-License-Identifier: MIT
 ##
-## Adafruit BME680 I2C or SPI Temperature Humidity Pressure Gas Sensor
+## Adafruit BME680/BME688 I2C or SPI Temperature Humidity Pressure Gas Sensor
 #######################################################################
 ##
-## Adafruit BME680 I2C or SPI Temperature Humidity Pressure Gas Sensor
+## Adafruit BME680/BME688 I2C or SPI Temperature Humidity Pressure Gas Sensor
 ## See: https://www.adafruit.com/product/3660
 ## See: https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/
 ## See: https://github.com/adafruit/Adafruit_CircuitPython_BME680.git
 ## See: https://github.com/adafruit/Adafruit_BME280_Library.git
+## See: https://cdn-shop.adafruit.com/product-files/3660/BME680.pdf
+## See: https://github.com/boschsensortec/BME68x-Sensor-API.git
 ##
 
 $ sudo apt update
@@ -131,3 +133,13 @@ Altitude = 3899.42 meters
 $ mkdir -p ~/src/github.com/adafruit
 $ cd ~/src/github.com/adafruit
 $ git clone https://github.com/adafruit/Adafruit_BME680.git
+
+
+####################################################################
+## Bosch Sensortec's BME680 and BME688 sensor API
+## See: https://github.com/boschsensortec/BME68x-Sensor-API.git
+####################################################################
+
+$ mkdir -p ~/src/github.com/boschsensortec
+$ cd ~/src/github.com/boschsensortec
+$ git clone https://github.com/boschsensortec/BME68x-Sensor-API.git

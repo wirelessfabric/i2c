@@ -30,6 +30,14 @@ bme280/*.lib
 bme280/*.dSYM
 bme280/.DS_Store
 bme280/info.plist
+bme68x/*.o
+bme68x/*.obj
+bme68x/*.exe
+bme68x/*.exp
+bme68x/*.lib
+bme68x/*.dSYM
+bme68x/.DS_Store
+bme68x/info.plist
 emc2101/*.o
 emc2101/*.obj
 emc2101/*.exe
@@ -79,6 +87,7 @@ adafruit/neorotary
 adafruit/neorotary1x4
 adafruit/neoslider
 bme280/bme280
+bme68x/bme68x
 emc2101/emc2101
 lc709203f/lc709203f
 tlv493d/tlv493d
@@ -91,6 +100,7 @@ adafruit/neorotary_i2c_hid
 adafruit/neorotary1x4_i2c_hid
 adafruit/neoslider_i2c_hid
 bme280/bme280_i2c_hid
+bme68x/bme68x_i2c_hid
 emc2101/emc2101_i2c_hid
 pimoroni/buttonshim_i2c_hid
 tlv493d/tlv493d_i2c_hid

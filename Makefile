@@ -80,6 +80,7 @@ endif
 HID_LDFLAGS += $(LDFLAGS)
 
 HID_EXE := bme280/bme280_i2c_hid
+HID_EXE += bme68x/bme68x_i2c_hid
 HID_EXE += emc2101/emc2101_i2c_hid
 HID_EXE += tlv493d/tlv493d_i2c_hid
 HID_EXE += pimoroni/buttonshim_i2c_hid
@@ -90,6 +91,7 @@ HID_EXE += adafruit/neorotary1x4_i2c_hid
 HID_EXE += mcp2221a/scan_i2c_hid
 
 I2C_EXE := bme280/bme280
+I2C_EXE += bme68x/bme68x
 I2C_EXE += emc2101/emc2101
 I2C_EXE += lc709203f/lc709203f
 I2C_EXE += tlv493d/tlv493d
@@ -127,6 +129,9 @@ adafruit/neorotary1x4: adafruit/neorotary1x4.c $(I2C) $(I2C_INC) $(SEESAW_ENCODE
 	$(CC) $(CFLAGS) $< $(I2C) $(SEESAW_ENCODER) $(LDFLAGS) -o $@
 
 bme280/bme280: bme280/bme280.c bme280/bme280.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) -lm $(LDFLAGS) -o $@
+
+bme68x/bme68x: bme68x/bme68x.c bme68x/bme68x.h $(I2C) $(I2C_INC)
 	$(CC) $(CFLAGS) $< $(I2C) -lm $(LDFLAGS) -o $@
 
 emc2101/emc2101: emc2101/emc2101.c emc2101/emc2101.h $(I2C) $(I2C_INC)
@@ -174,6 +179,9 @@ adafruit/neorotary1x4_i2c_hid: adafruit/neorotary1x4.c $(HID) $(HID_INC) $(SEESA
 bme280/bme280_i2c_hid: bme280/bme280.c bme280/bme280.h $(HID) $(HID_INC)
 	$(CC) $(HID_CFLAGS) bme280/bme280.c $(HID) $(HID_LDFLAGS) -lm -o $@
 
+bme68x/bme68x_i2c_hid: bme68x/bme68x.c bme68x/bme68x.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) bme68x/bme68x.c $(HID) $(HID_LDFLAGS) -lm -o $@
+
 emc2101/emc2101_i2c_hid: emc2101/emc2101.c emc2101/emc2101.h $(HID) $(HID_INC)
 	$(CC) $(HID_CFLAGS) emc2101/emc2101.c $(HID) $(HID_LDFLAGS) -o $@
 
@@ -206,6 +214,8 @@ pisugar3: pisugar3/pisugar3
 mcp2221a: mcp2221a/scan_i2c_hid
 
 bme280: bme280/bme280 bme280/bme280_i2c_hid
+
+bme68x: bme68x/bme68x bme68x/bme68x_i2c_hid
 
 emc2101: emc2101/emc2101 emc2101/emc2101_i2c_hid
 

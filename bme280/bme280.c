@@ -90,8 +90,8 @@ static void bme280_setup_weather_monitor(void* context) {
     i2c_write_reg_u8(context, BME280_REG_CONTROL_HUMIDITY, BME280_OVERSCAN_HUMIDITY);
 
     i2c_write_reg_u8(context, BME280_REG_CONFIG, BME280_IIR_FILTER_OFF |
-                                            BME280_STANDBY_MS_0_5 |
-                                            BME280_SPI_3WIRE_OFF);
+                                                 BME280_STANDBY_MS_0_5 |
+                                                 BME280_SPI_3WIRE_OFF);
 }
 
 static int bme280_compute_fine_temperature(uint32_t t) {

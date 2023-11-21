@@ -11,6 +11,9 @@
 ## See: https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout
 ## See: https://github.com/adafruit/Adafruit_CircuitPython_BME280.git
 ## See: https://github.com/adafruit/Adafruit_BME280_Library.git
+## See: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
+## See: https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme680/
+## See: https://community.bosch-sensortec.com/t5/Knowledge-base/BME680-gas-sensor-series-design-guide/ta-p/5952
 ##
 
 $ sudo apt update
