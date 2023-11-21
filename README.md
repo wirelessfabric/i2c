@@ -10,6 +10,7 @@ Adafruit I2C Stemma QT Quad Rotary Encoder Breakout with NeoPixel
 Adafruit I2C Stemma QT NeoSlider Slide Potentiometer with 4 NeoPixels
 
 Adafruit BME280 I2C Temperature Humidity Pressure Sensor
+Adafruit BME688 I2C Temperature Humidity Pressure Gas Sensor
 Adafruit BNO055 I2C 9-DOF Absolute Orientation IMU Fusion Breakout
 Adafruit BNO085 I2C 9-DOF Orientation IMU Fusion Breakout
 Adafruit EMC2101 I2C PC Fan Controller and Temperature Sensor
