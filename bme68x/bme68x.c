@@ -30,6 +30,7 @@ static struct bme68x_coeffs {
     int64_t P7;
     int64_t P8;
     int64_t P9;
+    int64_t P10;
 
     // humidity compensation values
     int H1;
@@ -38,6 +39,12 @@ static struct bme68x_coeffs {
     int H4;
     int H5;
     int H6;
+    int H7;
+
+    // gas compensation values
+    int G1;
+    int G2;
+    int G3;
 } coeffs;
 
 static uint8_t variant = 0;
@@ -55,39 +62,38 @@ static void bme68x_block_while_status(void* context, uint8_t bits, unsigned usec
 }
 
 static void bme68x_block_while_measuring(void* context, unsigned usec) {
-    while ((i2c_read_u8(context, BME68X_REG_STATUS_MEASURE) & BME68X_STATUS_MEASURING) != 0)
+    while ((i2c_read_u8(context, BME68X_REG_MEASUREMENT) & BME68X_MEASURING) != 0)
         i2c_sleep(usec);
 }
 
 static void bme68x_read_coeffs(void* context) {
-    coeffs.T1 = (int)i2c_read_u16_le(context, BME68X_REG_T1);
+    coeffs.T1 = (int)i2c_read_s16_le(context, BME68X_REG_T1);
     coeffs.T2 = (int)i2c_read_s16_le(context, BME68X_REG_T2);
-    coeffs.T3 = (int)i2c_read_s16_le(context, BME68X_REG_T3);
+    coeffs.T3 = (int)i2c_read_u8(context, BME68X_REG_T3);
 
     coeffs.P1 = (int64_t)i2c_read_u16_le(context, BME68X_REG_P1);
     coeffs.P2 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P2);
-    coeffs.P3 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P3);
+    coeffs.P3 = (int64_t)i2c_read_u8(context, BME68X_REG_P3);
     coeffs.P4 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P4);
     coeffs.P5 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P5);
-    coeffs.P6 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P6);
-    coeffs.P7 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P7);
+    coeffs.P6 = (int64_t)i2c_read_u8(context, BME68X_REG_P6);
+    coeffs.P7 = (int64_t)i2c_read_u8(context, BME68X_REG_P7);
     coeffs.P8 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P8);
     coeffs.P9 = (int64_t)i2c_read_s16_le(context, BME68X_REG_P9);
+    coeffs.P10 = (int64_t)i2c_read_u8(context, BME68X_REG_P10);
 
-    coeffs.H1 = (int)i2c_read_u8(context, BME68X_REG_H1);
-    coeffs.H2 = (int)i2c_read_s16_le(context, BME68X_REG_H2);
-    coeffs.H3 = (int)i2c_read_u8(context, BME68X_REG_H3);
-    uint8_t e4 = i2c_read_u8(context, BME68X_REG_E4);
-    uint8_t e5 = i2c_read_u8(context, BME68X_REG_E5);
-    uint8_t e6 = i2c_read_u8(context, BME68X_REG_E6);
-    coeffs.H4 = ((int)e4 << 4) | (e5 & 0xF);
-    coeffs.H5 = ((int)e6 << 4) | (e5 >> 4);
+    coeffs.H1 = (int)i2c_read_u16_le(context, BME68X_REG_H1);
+    coeffs.H2 = (int)i2c_read_u8(context, BME68X_REG_H2);
+    coeffs.H3 = (int)i2c_read_s8(context, BME68X_REG_H3);
+    coeffs.H4 = (int)i2c_read_s8(context, BME68X_REG_H4);
+    coeffs.H5 = (int)i2c_read_s8(context, BME68X_REG_H5);
     coeffs.H6 = (int)i2c_read_u8(context, BME68X_REG_H6);
+    coeffs.H7 = (int)i2c_read_s8(context, BME68X_REG_H7);
 
-    // pre-shift recurring shifts
-    coeffs.P4 <<= 35;
-    coeffs.P7 <<= 4;
-    coeffs.H4 <<= 20;
+    coeffs.G1 = (int)i2c_read_s8(context, BME68X_REG_G1);
+    coeffs.G2 = (int)i2c_read_s16_le(context, BME68X_REG_G2);
+    coeffs.G3 = (int)i2c_read_s8(context, BME68X_REG_G3);
+    printf("G1 %d G2 %d G3 %d\n", coeffs.G1, coeffs.G2, coeffs.G3);
 }
 
 static void bme68x_setup_weather_monitor(void* context) {

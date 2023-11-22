@@ -134,7 +134,6 @@ $ mkdir -p ~/src/github.com/adafruit
 $ cd ~/src/github.com/adafruit
 $ git clone https://github.com/adafruit/Adafruit_BME680.git
 
-
 ####################################################################
 ## Bosch Sensortec's BME680 and BME688 sensor API
 ## See: https://github.com/boschsensortec/BME68x-Sensor-API.git
@@ -143,3 +142,68 @@ $ git clone https://github.com/adafruit/Adafruit_BME680.git
 $ mkdir -p ~/src/github.com/boschsensortec
 $ cd ~/src/github.com/boschsensortec
 $ git clone https://github.com/boschsensortec/BME68x-Sensor-API.git
+
+####################################################################
+## coefficients
+####################################################################
+
+   0x89       00
+0  0x8a  0x01 01 01 h      T2
+1  0x8c  0x03 03 03 b      T3
+2  0x8d  0x04 04 04 B      
+3  0x8e  0x05 05 05 H      P1
+4  0x90  0x07 07 07 h      P2
+5  0x92  0x09 09 09 b      P3
+6  0x93  0x0A 10 10 B      
+7  0x94  0x0B 11 11 h      P4
+8  0x96  0x0D 13 13 h      P5
+9  0x98  0x0F 14 15 b      P7
+10 0x99  0x10 16 16 b      P6
+11 0x9a  0x11 17 17 H      
+12 0x9c  0x13 19 19 h      P8
+13 0x9e  0x15 21 21 h      P9
+14 0xa0  0x17 23 23 B      P10
+15 0xa1  0x18 24 24 B      
+
+16 0xe1  0x00 00 25 B      H2
+17 0xe2  0x01 01 26 H      H1
+18 0xe4  0x03 03 28 b      H3
+19 0xe5  0x04 04 29 b      H4
+20 0xe6  0x05 05 30 b      H5
+21 0xe7  0x06 06 31 B      H6
+22 0xe8  0x07 07 32 b      H7
+23 0xe9  0x08 08 33 H      T1
+24 0xeb  0x0A 10 35 h      G2
+25 0xed  0x0C 12 37 b      G1      
+26 0xef  0x0D 13 38 b      G3
+              14
+		      15
+
+$ sudo vi /usr/local/lib/python3.9/dist-packages/adafruit_bme680.py
+$ python3 ~/src/github.com/adafruit/Adafruit_CircuitPython_BME680/examples/bme680_simpletest.py 
+ bytearray(b'\xc0&h\x03\xd0N\x92\x85\xd7X\x00\xf6%Z\xff=\x1e\x00\x00\x94\xec\x94\xf9\x1e\x89')
+ bytearray(b'\xc0&h\x03\xd0N\x92\x85\xd7X\x00\xf6%Z\xff=\x1e\x00\x00\x94\xec\x94\xf9\x1e\x89?\x061\x00-\x14x\x9ciew\xc6\x02\x12&\x01')
+ [26662, 3, 208, 37454, -10363, 88, 0, 9718, -166, 61, 30, 0, -4972, -1644, 30, 137, 63, 12550, 0, 45, 20, 120, -100, 25961, -14729, 2, 18]
+ [26662.0, 3.0, 208.0, 37454.0, -10363.0, 88.0, 0.0, 9718.0, -166.0, 61.0, 30.0, 0.0, -4972.0, -1644.0, 30.0, 137.0, 63.0, 12550.0, 0.0, 45.0, 20.0, 120.0, -100.0, 25961.0, -14729.0, 2.0, 18.0] 
+:::
+
+$ python3 ~/src/github.com/adafruit/Adafruit_CircuitPython_BME680/examples/bme680_simpletest.py 
+
+Temperature: 29.6 C
+Gas: 125000 ohm
+Humidity: 100.0 %
+Pressure: 624.578 hPa
+Altitude = 3899.42 meters
+
+Temperature: 19.4 C
+Gas: 135845 ohm
+Humidity: 50.3 %
+Pressure: 980.347 hPa
+Altitude = 277.61 meters
+
+Temperature: 19.4 C
+Gas: 140891 ohm
+Humidity: 48.6 %
+Pressure: 980.353 hPa
+Altitude = 277.56 meters
+:::

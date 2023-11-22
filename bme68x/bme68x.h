@@ -15,16 +15,10 @@
 #define BME68X_I2C_ADDR 0x77
 
 // BME68X registers
-#define BME68X_REG_STATUS_MEASURE   0x1D
-#define BME68X_REG_P1               0x1F
-#define BME68X_REG_P2               0x20
-#define BME68X_REG_P3               0x21
-#define BME68X_REG_T1               0x22
-#define BME68X_REG_T2               0x23
-#define BME68X_REG_T3               0x24
-#define BME68X_REG_H1               0x25
-#define BME68X_REG_H2               0x26
-#define BME68X_REG_H3               0x27
+#define BME68X_REG_MEASUREMENT      0x1D
+#define BME68X_REG_PRESSURE         0x1F
+#define BME68X_REG_TEMPERATURE      0x22
+#define BME68X_REG_HUMIDITY         0x25
 
 #define BME68X_REG_CONTROL_GAS      0x71
 #define BME68X_REG_CONTROL_HUMIDITY 0x72
@@ -32,23 +26,33 @@
 #define BME68X_REG_CONTROL          0x74
 #define BME68X_REG_CONFIG           0x75
 
-#define BME68X_REG_P4               0x94
-#define BME68X_REG_P5               0x96
-#define BME68X_REG_P6               0x98
-#define BME68X_REG_P7               0x9A
-#define BME68X_REG_P8               0x9C
-#define BME68X_REG_P9               0x9E
-#define BME68X_REG_E4               0xE4
-#define BME68X_REG_E5               0xE5
-#define BME68X_REG_E6               0xE6
-#define BME68X_REG_H6               0xE7
-
 #define BME68X_REG_CHIP_ID          0xD0
 #define BME68X_REG_SOFT_RESET       0xE0
 #define BME68X_REG_VARIANT          0xF0
-#define BME68X_REG_PRESSURE         0xF7
-#define BME68X_REG_TEMPERATURE      0xFA
-#define BME68X_REG_HUMIDITY         0xFD
+
+#define BME68X_REG_T1               0xE9
+#define BME68X_REG_T2               0x8A
+#define BME68X_REG_T3               0x8C
+#define BME68X_REG_P1               0x8E
+#define BME68X_REG_P2               0x90
+#define BME68X_REG_P3               0x92
+#define BME68X_REG_P4               0x94
+#define BME68X_REG_P5               0x96
+#define BME68X_REG_P6               0x99
+#define BME68X_REG_P7               0x98
+#define BME68X_REG_P8               0x9C
+#define BME68X_REG_P9               0x9E
+#define BME68X_REG_P10              0xA0
+#define BME68X_REG_H1               0xE2
+#define BME68X_REG_H2               0xE1
+#define BME68X_REG_H3               0xE4
+#define BME68X_REG_H4               0xE5
+#define BME68X_REG_H5               0xE6
+#define BME68X_REG_H6               0xE7
+#define BME68X_REG_H7               0xE8
+#define BME68X_REG_G1               0xED
+#define BME68X_REG_G2               0xEB
+#define BME68X_REG_G3               0xEF
 
 // chip id value
 #define BME68X_CHIP_ID              0x61
@@ -60,7 +64,9 @@
 
 // status values
 #define BME68X_STATUS_IM_UPDATE     0x01
-#define BME68X_STATUS_MEASURING     0x80
+
+// measurement status values
+#define BME68X_MEASURING            0x80
 
 // mode values
 #define BME68X_MODE_SLEEP           0x00
