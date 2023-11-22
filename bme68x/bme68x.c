@@ -93,7 +93,6 @@ static void bme68x_read_coeffs(void* context) {
     coeffs.G1 = (int)i2c_read_s8(context, BME68X_REG_G1);
     coeffs.G2 = (int)i2c_read_s16_le(context, BME68X_REG_G2);
     coeffs.G3 = (int)i2c_read_s8(context, BME68X_REG_G3);
-    printf("G1 %d G2 %d G3 %d\n", coeffs.G1, coeffs.G2, coeffs.G3);
 }
 
 static void bme68x_setup_weather_monitor(void* context) {

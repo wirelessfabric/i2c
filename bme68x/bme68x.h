@@ -52,7 +52,7 @@
 #define BME68X_REG_H7               0xE8
 #define BME68X_REG_G1               0xED
 #define BME68X_REG_G2               0xEB
-#define BME68X_REG_G3               0xEF
+#define BME68X_REG_G3               0xEE
 
 // chip id value
 #define BME68X_CHIP_ID              0x61

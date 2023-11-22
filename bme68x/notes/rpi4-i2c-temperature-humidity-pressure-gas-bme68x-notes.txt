@@ -175,7 +175,7 @@ $ git clone https://github.com/boschsensortec/BME68x-Sensor-API.git
 23 0xe9  0x08 08 33 H      T1
 24 0xeb  0x0A 10 35 h      G2
 25 0xed  0x0C 12 37 b      G1      
-26 0xef  0x0D 13 38 b      G3
+26 0xee  0x0D 13 38 b      G3
               14
 		      15
 
