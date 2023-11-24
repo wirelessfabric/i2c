@@ -37,6 +37,7 @@ SEESAW_HID_EXE = $(SEESAW_HID_EXE) adafruit/neokey1x4_i2c_hid.exe
 SEESAW_HID_EXE = $(SEESAW_HID_EXE) adafruit/neoslider_i2c_hid.exe
 
 HID_EXE = bme280\bme280_i2c_hid.exe
+HID_EXE = $(HID_EXE) bme68x\bme68x_i2c_hid.exe
 HID_EXE = $(HID_EXE) emc2101\emc2101_i2c_hid.exe
 HID_EXE = $(HID_EXE) pimoroni\buttonshim_i2c_hid.exe
 HID_EXE = $(HID_EXE) tlv493d\tlv493d_i2c_hid.exe
@@ -48,6 +49,7 @@ all: mcp2221a hid seesaw_hid
 clean:
 	del $(HID)
 	del bme280\*.obj bme280\*.lib bme280\*.exp bme280\*.exe
+	del bme68x\*.obj bme68x\*.lib bme68x\*.exp bme68x\*.exe
 	del emc2101\*.obj emc2101\*.lib emc2101\*.exp emc2101\*.exe
 	del pimoroni\*.obj pimoroni\*.lib pimoroni\*.exp pimoroni\*.exe
 	del tlv493d\*.obj tlv493d\*.lib tlv493d\*.exp tlv493d\*.exe
@@ -119,6 +121,12 @@ bme280/bme280_i2c_hid.obj: bme280/bme280.c
 	cl $(CFLAGS) /c $? /Fo:$@
 
 bme280/bme280_i2c_hid.exe: $(HID) bme280/bme280_i2c_hid.obj
+	cl $(CFLAGS) $** /Fe:$@
+
+bme68x/bme68x_i2c_hid.obj: bme68x/bme68x.c
+	cl $(CFLAGS) /c $? /Fo:$@
+
+bme68x/bme68x_i2c_hid.exe: $(HID) bme68x/bme68x_i2c_hid.obj
 	cl $(CFLAGS) $** /Fe:$@
 
 emc2101/emc2101_i2c_hid.obj: emc2101/emc2101.c
