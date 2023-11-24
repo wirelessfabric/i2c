@@ -169,6 +169,7 @@ $ make dbg=1
 #### Example: Make binary executable for individual C code examples
 ```
 $ make bme280
+$ make bme68x
 $ make emc2101
 $ make lc709203f
 $ make buttonshim
@@ -205,6 +206,14 @@ Humidity: 53.48 %
 Pressure: 976.89 hPa
 Altitude: 307.20 meters
 
+^C
+```
+
+```
+$ bme68x/bme68x
+Temperature:  0.00 C 32.00 F
+Temperature: 20.48 C 68.86 F
+Temperature: 20.49 C 68.88 F
 ^C
 ```
 

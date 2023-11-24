@@ -50,7 +50,6 @@ static struct bme68x_coeffs {
 static uint8_t variant = 0;
 static int t_fine = 0;
 static int t_fine_adjust = 0;
-static float p_sea_level = 1013.25f; // hPa
 
 static inline float ctof(float celsius) {
     return (celsius * 1.8f) + 32.f;
@@ -126,85 +125,23 @@ static float bme68x_compute_temperature(uint32_t t) {
     return (float)((t_fine * 5 + 128) >> 8) / 100.f;
 }
 
-static float bme68x_compute_humidity(uint16_t h) {
-    if (h == 0x8000)
-        return 0.f;
-
-    int h1 = t_fine - 76800;
-    int h2 = (h1 * coeffs.H6) >> 10;
-    int h3 = (h1 * coeffs.H3) >> 11;
-    int h4 = ((h2 * (h3 + 32768)) >> 10) + 2097152;
-    int h5 = ((int)h << 14) - coeffs.H4 - (h1 * coeffs.H5) + 16384;
-
-    h3 = (h5 >> 15) * ((h4 * coeffs.H2 + 8192) >> 14);
-    h4 = h3 >> 15;
-    h4 = (h4 * h4) >> 7;
-    h5 = h3 - ((h4 * coeffs.H1) >> 4);
-
-    if (h5 < 0)
-        h5 = 0;
-    else if (h5 > 419430400)
-        h5 = 419430400;
-
-    return (float)(h5 >> 12) / 1024.f;
-}
-
-static float bme68x_compute_pressure(uint32_t p) {
-    if (p == 0x800000)
-        return 0.f;
-
-    // drop lowest 4 bits
-    p >>= 4;
-
-    int64_t p1 = (int64_t)t_fine - 128000;
-    int64_t p2 = p1 * p1;
-    int64_t p3 = p2 * coeffs.P6;
-    int64_t p4 = (int64_t)1 << 47;
-
-    p3 += (p1 * coeffs.P5) << 17;
-    p3 += coeffs.P4;
-
-    p1 = ((p2 * coeffs.P3) >> 8) + ((p1 * coeffs.P2) << 12);
-    p1 = ((p4 + p1) * coeffs.P1) >> 33;
-    if (p1 == 0)
-        return 0.f;
-
-    p4 = 1048576 - p;
-    p4 = (((p4 << 31) - p3) * 3125) / p1;
-    p2 = p4 >> 13;
-    p1 = (coeffs.P9 * p2 * p2) >> 25;
-    p3 = (coeffs.P8 * p4) >> 19;
-    p4 = ((p4 + p1 + p3) >> 8) + coeffs.P7;
-
-    return (float)p4 / 25600.f;
-}
-
-static float bme68x_compute_altitude(float p) {
-    return 44330.f * (1.f - (float)pow(p / p_sea_level, 0.1903f));
-}
-
 static void bme68x_monitor_weather(void* context) {
     i2c_write_reg_u8(context, BME68X_REG_CONTROL, BME68X_OVERSCAN_TEMPERATURE |
-                                             BME68X_OVERSCAN_PRESSURE |
-                                             BME68X_MODE_FORCE);
+                                                  BME68X_OVERSCAN_PRESSURE |
+                                                  BME68X_MODE_FORCE);
 
     bme68x_block_while_measuring(context, 2000);
 
-    uint32_t p = i2c_read_u24_be(context, BME68X_REG_PRESSURE);
+    (void)i2c_read_u24_be(context, BME68X_REG_PRESSURE);
+    (void)i2c_read_u16_be(context, BME68X_REG_HUMIDITY);
+
     uint32_t t = i2c_read_u24_be(context, BME68X_REG_TEMPERATURE);
-    uint16_t h = i2c_read_u16_be(context, BME68X_REG_HUMIDITY);
 
     i2c_write_reg_u8(context, BME68X_REG_CONTROL, BME68X_MODE_SLEEP);
 
     float T = bme68x_compute_temperature(t);
-    float H = bme68x_compute_humidity(h);
-    float P = bme68x_compute_pressure(p);
-    float A = bme68x_compute_altitude(P);
 
     printf("Temperature: %5.2f C %5.2f F\n", T, ctof(T));
-    printf("Humidity: %5.2f %%\n", H);
-    printf("Pressure: %6.2f hPa\n", P);
-    printf("Altitude: %6.2f meters\n\n", A);
 }
 
 static void loop(void* context) {

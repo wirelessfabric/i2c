@@ -174,8 +174,8 @@ static float bme280_compute_altitude(float p) {
 
 static void bme280_monitor_weather(void* context) {
     i2c_write_reg_u8(context, BME280_REG_CONTROL, BME280_OVERSCAN_TEMPERATURE |
-                                             BME280_OVERSCAN_PRESSURE |
-                                             BME280_MODE_FORCE);
+                                                  BME280_OVERSCAN_PRESSURE |
+                                                  BME280_MODE_FORCE);
 
     bme280_block_while_status(context, BME280_STATUS_MEASURING, 2000);
 
