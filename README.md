@@ -33,6 +33,7 @@ Pimoroni HyperPixel 4.0" Touchscreen
 PiSugar 3 UPS HAT
 
 Bus Pirate v3.6 by Dangerous Prototypes
+Teansic HDMI Male to Female Test PCB Board Adapter I2C pins
 ```
 
 <img src="./gallery/IMG_20230809_192238078.jpg" width="500">
