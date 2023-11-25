@@ -7,6 +7,7 @@
 #######################################################################
 ##
 ## Adafruit VL53L0X Time of Flight (TOF) Micro-LIDAR Distance Sensor Breakout
+## See: https://www.adafruit.com/product/3317
 ## See: https://learn.adafruit.com/adafruit-vl53l0x-micro-lidar-distance-sensor-breakout
 ## See: https://cdn-learn.adafruit.com/assets/assets/000/037/547/original/en.DM00279086.pdf
 ## See: https://github.com/adafruit/Adafruit_CircuitPython_VL53L0X
@@ -16,6 +17,7 @@
 ## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/iio/proximity/vl53l0x-i2c.c
 ##
 ## See: https://github.com/analogdevicesinc/libiio.git
+## See: https://github.com/pololu/vl53l0x-arduino
 
 $ sudo apt update
 $ sudo apt upgrade
