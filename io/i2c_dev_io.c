@@ -199,7 +199,7 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
         args->size = I2C_SMBUS_WORD_DATA;
     else {
         if (i2c_debug(context))
-            printf("smbus_read_reg(0x%02x) size error\n", reg);
+            printf("smbus_transfer_reg(0x%02x) size error\n", reg);
         return I2C_SMBUS_SIZE_ERROR;
     }
 
@@ -213,7 +213,7 @@ int smbus_transfer_reg(context* context, int reg, struct i2c_smbus_ioctl_data* a
 
     if (result < 0) {
         if (i2c_debug(context))
-            printf("smbus_write_reg(0x%02x) ioctl result %d\n", reg, result);
+            printf("smbus_transfer_reg(0x%02x) ioctl result %d\n", reg, result);
         return I2C_SMBUS_TRANSFER_ERROR;
     }
 

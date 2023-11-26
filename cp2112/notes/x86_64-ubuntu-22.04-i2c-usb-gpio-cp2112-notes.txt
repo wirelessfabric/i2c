@@ -62,6 +62,10 @@ tmpfs           6.3G     0  6.3G   0% /run/qemu
 /dev/sda2       269M   60M  210M  23% /boot/efi
 tmpfs           1.3G  164k  1.3G   1% /run/user/1000
 
+##################################################################
+## connect CP2112 using an adb usb cable
+##################################################################
+
 $ sudo dmesg | grep usb
 :::
 [48330.059676] usb 3-1.4: new full-speed USB device number 10 using xhci_hcd
@@ -103,3 +107,37 @@ Warning: Can't use SMBus Quick Write command, will skip some addresses
 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 60:                                                 
 70:                                                 
+
+##################################################################
+## access i2c without sudo for debugging in vscode
+##################################################################
+
+$ sudo usermod -a -G i2c `whoami`
+$ sudo vi /etc/udev/rules.d/10-local_i2c_group.rules
+KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+$ sudo reboot
+
+##################################################################
+## try CP2101 with various module
+##################################################################
+
+## i2c_read_reg product id
+$ vcnl4020/vcnl4020 --i2c_bus=/dev/i2c-8 --dbg --dump
+i2c write > 81 
+i2c_read_reg(0x81) write result -1
+ERROR: setup() no response from sensor
+ERROR: setup() failed -40
+
+## i2c_read_reg chip id
+$ bme68x/bme68x --i2c_bus=/dev/i2c-8 --dbg --dump
+i2c write > d0 
+i2c_read_reg(0xd0) write result -1
+ERROR: setup() no response from sensor
+ERROR: setup() failed -40
+
+## smbus_read_reg ic version
+$ lc709203f/lc709203f --i2c_bus=/dev/i2c-8 --dbg --dump
+smbus ioctl < 00 00 00 
+smbus_transfer_reg(0x11) ioctl result -1
+lc709203f_get: result -23
+ERROR: setup() failed -23

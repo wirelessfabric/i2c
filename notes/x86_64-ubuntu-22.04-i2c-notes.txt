@@ -152,3 +152,12 @@ Temperature: 20.44 C 68.79 F
 Temperature: 20.44 C 68.79 F
 Temperature: 20.44 C 68.79 F
 ^C
+
+##################################################################
+## access i2c without sudo for debugging in vscode
+##################################################################
+
+$ sudo usermod -a -G i2c `whoami`
+$ sudo vi /etc/udev/rules.d/10-local_i2c_group.rules
+KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+$ sudo reboot

@@ -38,7 +38,11 @@ static void loop(void* context) {
 static int setup(void* context) {
     uint8_t product_id;
     int result = i2c_read_reg_u8(context, VCNL4020_REG_PRODUCT_ID, &product_id);
-    if (result < 0)
+    if (result == I2C_WRITE_ERROR) {
+        printf("ERROR: setup() no response from sensor\n");
+        return VCNL4020_NO_RESPONSE;
+    }
+    else if (result < 0)
         return result;
     else if (product_id != VCNL4020_PRODUCT_ID) {
         printf("ERROR: setup() unexpected product id 0x%02x\n", product_id);
