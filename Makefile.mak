@@ -41,6 +41,7 @@ HID_EXE = $(HID_EXE) bme68x\bme68x_i2c_hid.exe
 HID_EXE = $(HID_EXE) emc2101\emc2101_i2c_hid.exe
 HID_EXE = $(HID_EXE) pimoroni\buttonshim_i2c_hid.exe
 HID_EXE = $(HID_EXE) tlv493d\tlv493d_i2c_hid.exe
+HID_EXE = $(HID_EXE) vcnl4020\vcnl4020_i2c_hid.exe
 
 MCP2221A_EXE = mcp2221a\scan_i2c_hid.exe
 
@@ -53,6 +54,7 @@ clean:
 	del emc2101\*.obj emc2101\*.lib emc2101\*.exp emc2101\*.exe
 	del pimoroni\*.obj pimoroni\*.lib pimoroni\*.exp pimoroni\*.exe
 	del tlv493d\*.obj tlv493d\*.lib tlv493d\*.exp tlv493d\*.exe
+	del vcnl4020\*.obj vcnl4020\*.lib vcnl4020\*.exp vcnl4020\*.exe
 	del mcp2221a\*.obj mcp2221a\*.lib mcp2221a\*.exp mcp2221a\*.exe
 	del adafruit\*.obj adafruit\*.lib adafruit\*.exp adafruit\*.exe
 
@@ -145,6 +147,12 @@ tlv493d/tlv493d_i2c_hid.obj: tlv493d/tlv493d.c
 	cl $(CFLAGS) /c $? /Fo:$@
 
 tlv493d/tlv493d_i2c_hid.exe: $(HID) tlv493d/tlv493d_i2c_hid.obj
+	cl $(CFLAGS) $** /Fe:$@
+
+vcnl4020/vcnl4020_i2c_hid.obj: vcnl4020/vcnl4020.c
+	cl $(CFLAGS) /c $? /Fo:$@
+
+vcnl4020/vcnl4020_i2c_hid.exe: $(HID) vcnl4020/vcnl4020_i2c_hid.obj
 	cl $(CFLAGS) $** /Fe:$@
 
 hid: $(HID_EXE)
