@@ -62,6 +62,14 @@ tlv493d/*.lib
 tlv493d/*.dSYM
 tlv493d/.DS_Store
 tlv493d/info.plist
+vcnl4020/*.o
+vcnl4020/*.obj
+vcnl4020/*.exe
+vcnl4020/*.exp
+vcnl4020/*.lib
+vcnl4020/*.dSYM
+vcnl4020/.DS_Store
+vcnl4020/info.plist
 mcp2221a/*.o
 mcp2221a/*.obj
 mcp2221a/*.exe

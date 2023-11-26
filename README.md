@@ -17,8 +17,10 @@ Adafruit EMC2101 I2C PC Fan Controller and Temperature Sensor
 Adafruit LC709203F I2C LiPoly / LiIon Fuel Gauge and Battery Monitor
 Adafruit TLV493D-A1B6 I2C 3D Magnetic Sensor
 Adafruit VL53L0X I2C Time of Flight (TOF) Micro-LIDAR Distance Sensor Breakout
+Adafruit VCNL4020 Proximity and Light Sensor
 
-Adafruit MCP2221A Breakout General Purpose USB to I2C GPIO ADC
+Adafruit MCP2221A Breakout General Purpose USB HID I2C GPIO ADC Bridge
+Silicon Labs CP2112 USB HID SMBus/I2C Bridge Chip
 
 HiLetgo DS3231 I2C High Precision RTC
 Hosyond 0.96" OLED I2C 128x64 SSD1306 OLED Screen
@@ -175,6 +177,7 @@ $ make emc2101
 $ make lc709203f
 $ make buttonshim
 $ make tlv493d
+$ make vcnl4020
 $ make pisugar3
 $ make neokey1x4 
 $ make neoslider 
@@ -188,7 +191,7 @@ $ make mcp2221a
 
 #### Linux I2C Devices
 
-Example code for Linux I2C devices access the device on the bus from userspace by passing i2c device file descriptors to access functions provided in  i2c_dev_io.c.
+Example code for Linux I2C devices access the device on the bus from userspace by passing i2c device file descriptors to access functions provided in i2c_dev_io.c.
 
 ```
 $ bme280/bme280 --i2c_bus=/dev/i2c-6
@@ -241,6 +244,16 @@ Current Direction: Auto Mode
 Power Mode: Sleep
 Temperature Sensing Method: I2C
 
+^C
+```
+
+```
+$ vcnl4020/vcnl4020
+Proximity: 2388 mm
+Ambient Light: 125 lx
+
+Proximity: 2383 mm
+Ambient Light: 173 lx
 ^C
 ```
 

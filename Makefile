@@ -83,6 +83,7 @@ HID_EXE := bme280/bme280_i2c_hid
 HID_EXE += bme68x/bme68x_i2c_hid
 HID_EXE += emc2101/emc2101_i2c_hid
 HID_EXE += tlv493d/tlv493d_i2c_hid
+HID_EXE += vcnl4020/vcnl4020_i2c_hid
 HID_EXE += pimoroni/buttonshim_i2c_hid
 HID_EXE += adafruit/neokey1x4_i2c_hid
 HID_EXE += adafruit/neoslider_i2c_hid
@@ -95,6 +96,7 @@ I2C_EXE += bme68x/bme68x
 I2C_EXE += emc2101/emc2101
 I2C_EXE += lc709203f/lc709203f
 I2C_EXE += tlv493d/tlv493d
+I2C_EXE += vcnl4020/vcnl4020
 I2C_EXE += adafruit/neokey1x4
 I2C_EXE += adafruit/neoslider
 I2C_EXE += adafruit/neorotary
@@ -138,6 +140,9 @@ emc2101/emc2101: emc2101/emc2101.c emc2101/emc2101.h $(I2C) $(I2C_INC)
 	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
 
 lc709203f/lc709203f: lc709203f/lc709203f.c lc709203f/lc709203f.h $(I2C) $(I2C_INC)
+	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
+
+vcnl4020/vcnl4020: vcnl4020/vcnl4020.c vcnl4020/vcnl4020.h $(I2C) $(I2C_INC)
 	$(CC) $(CFLAGS) $< $(I2C) $(LDFLAGS) -o $@
 
 pimoroni/buttonshim: pimoroni/buttonshim.c pimoroni/buttonshim.h $(I2C) $(I2C_INC)
@@ -188,6 +193,9 @@ emc2101/emc2101_i2c_hid: emc2101/emc2101.c emc2101/emc2101.h $(HID) $(HID_INC)
 tlv493d/tlv493d_i2c_hid: tlv493d/tlv493d.c tlv493d/tlv493d.h $(HID) $(HID_INC)
 	$(CC) $(HID_CFLAGS) tlv493d/tlv493d.c $(HID) $(HID_LDFLAGS) -o $@
 
+vcnl4020/vcnl4020_i2c_hid: vcnl4020/vcnl4020.c vcnl4020/vcnl4020.h $(HID) $(HID_INC)
+	$(CC) $(HID_CFLAGS) vcnl4020/vcnl4020.c $(HID) $(HID_LDFLAGS) -o $@
+
 pimoroni/buttonshim_i2c_hid: pimoroni/buttonshim.c pimoroni/buttonshim.h $(HID) $(HID_INC)
 	$(CC) $(HID_CFLAGS) tlv493d/tlv493d.c $(HID) $(HID_LDFLAGS) -o $@
 
@@ -197,6 +205,7 @@ clean:
 	rm -rf emc2101/*.o emc2101/*.dSYM
 	rm -rf pimoroni/*.o pimoroni/*.dSYM
 	rm -rf tlv493d/*.o tlv493d/*.dSYM
+	rm -rf vcnl4020/*.o vcnl4020/*.dSYM
 	rm -rf font/*.o font/*.dSYM
 	rm -rf framebuffer/*.o,framebuffer/*.dSYM
 	rm -rf mcp2221a/*.o mcp2221a/*.dSYM
@@ -222,6 +231,8 @@ emc2101: emc2101/emc2101 emc2101/emc2101_i2c_hid
 buttonshim: pimoroni/buttonshim pimoroni/buttonshim_i2c_hid
 
 tlv493d: tlv493d/tlv493d tlv493d/tlv493d_i2c_hid
+
+vcnl4020: vcnl4020/vcnl4020 vcnl4020/vcnl4020_i2c_hid
 
 neokey1x4: adafruit/neokey1x4 adafruit/neokey1x4_i2c_hid
 

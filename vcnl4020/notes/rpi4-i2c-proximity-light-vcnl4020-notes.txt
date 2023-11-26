@@ -1,0 +1,119 @@
+##############################################################################################################
+## SPDX-FileCopyrightText: 2023 Alan Mikhak for The Perseus Group, Inc.
+##
+## SPDX-License-Identifier: MIT
+##
+## Adafruit VCNL4020 Proximity and Light Sensor
+##############################################################################################################
+##
+## VCNL4020 Proximity and Light Sensor
+##
+## See: https://www.adafruit.com/product/5810
+## See: https://learn.adafruit.com/adafruit-vcnl4020-proximity-and-light-sensor
+## See: https://github.com/adafruit/Adafruit_CircuitPython_VCNL4020.git
+## See: https://github.com/adafruit/Adafruit_VCNL4020
+## See: https://cdn-learn.adafruit.com/assets/assets/000/124/959/original/vcnl4020.pdf
+##
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install libi2c-dev i2c-tools xz-utils
+
+$ uname -a
+Linux rpi3 6.1.21-v7l+ #1642 SMP Mon Apr  3 17:22:30 BST 2023 armv7l GNU/Linux
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+####################################################################
+## i2c-tools device 0x13
+####################################################################
+
+$ ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-10  /dev/i2c-20  /dev/i2c-21  /dev/i2c-22  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6
+
+$ $ sudo i2cdetect -l
+i2c-1   i2c             bcm2835 (i2c@7e804000)                  I2C adapter
+i2c-21  i2c             fef09500.i2c                            I2C adapter
+i2c-6   i2c             bcm2835 (i2c@7e205c00)                  I2C adapter
+i2c-4   i2c             bcm2835 (i2c@7e205800)                  I2C adapter
+i2c-22  i2c             bcm2835 (i2c@7e205000)                  I2C adapter
+i2c-0   i2c             i2c-22-mux (chan_id 0)                  I2C adapter
+i2c-20  i2c             fef04500.i2c                            I2C adapter
+i2c-10  i2c             i2c-22-mux (chan_id 1)                  I2C adapter
+i2c-5   i2c             bcm2835 (i2c@7e205a00)                  I2C adapter
+
+$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- 13 -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- UU UU -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- UU -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- UU -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+
+####################################################################
+## Adafruit CircuitPython
+####################################################################
+
+## See: rpi4-circuitpython-notes.txt
+
+####################################################################
+## Adafruit VCNL4020 Proximity and Light Sensor
+## See: https://github.com/adafruit/Adafruit_CircuitPython_VCNL4020.git
+## See: https://docs.circuitpython.org/projects/vcnl4020/en/latest/
+####################################################################
+
+$ sudo pip3 install adafruit-circuitpython-vcnl4020
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: adafruit-circuitpython-vcnl4020 in /usr/local/lib/python3.9/dist-packages (1.0.0)
+Requirement already satisfied: adafruit-circuitpython-register in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-vcnl4020) (1.9.16)
+Requirement already satisfied: Adafruit-Blinka in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-vcnl4020) (8.20.0)
+Requirement already satisfied: adafruit-circuitpython-busdevice in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-vcnl4020) (5.2.6)
+Requirement already satisfied: rpi-ws281x>=4.0.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (5.0.0)
+Requirement already satisfied: RPi.GPIO in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (0.7.1)
+Requirement already satisfied: Adafruit-PlatformDetect>=3.13.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (3.47.0)
+Requirement already satisfied: adafruit-circuitpython-typing in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (1.9.4)
+Requirement already satisfied: Adafruit-PureIO>=1.1.7 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (1.1.11)
+Requirement already satisfied: pyftdi>=0.40.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (0.54.0)
+Requirement already satisfied: sysv-ipc>=1.1.0 in /usr/local/lib/python3.9/dist-packages (from Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (1.1.0)
+Requirement already satisfied: pyusb!=1.2.0,>=1.0.0 in /usr/local/lib/python3.9/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (1.2.1)
+Requirement already satisfied: pyserial>=3.0 in /usr/lib/python3/dist-packages (from pyftdi>=0.40.0->Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (3.5b0)
+Requirement already satisfied: typing-extensions~=4.0 in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-register->adafruit-circuitpython-vcnl4020) (4.7.1)
+Requirement already satisfied: adafruit-circuitpython-requests in /usr/local/lib/python3.9/dist-packages (from adafruit-circuitpython-typing->Adafruit-Blinka->adafruit-circuitpython-vcnl4020) (2.0.0)
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_CircuitPython_VCNL4020.git
+$ cd Adafruit_CircuitPython_VCNL4020
+$ ls
+adafruit_vcnl4020.py  CODE_OF_CONDUCT.md  docs  examples  LICENSE  LICENSES  optional_requirements.txt  pyproject.toml  README.rst  README.rst.license  requirements.txt
+$ cd examples/
+$ ls
+vcnl4020_simpletest.py
+
+$ python3 vcnl4020_simpletest.py 
+Proximity is: 0
+Ambient is: 0
+Proximity is: 2388
+Ambient is: 0
+Proximity is: 2391
+Ambient is: 0
+Proximity is: 2392
+Ambient is: 152
+^C
+
+####################################################################
+## Adafruit VCNL4020 Proximity and Light Sensor
+## See: https://github.com/adafruit/Adafruit_VCNL4020
+####################################################################
+
+$ mkdir -p ~/src/github.com/adafruit
+$ cd ~/src/github.com/adafruit
+$ git clone https://github.com/adafruit/Adafruit_VCNL4020
