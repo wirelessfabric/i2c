@@ -85,7 +85,7 @@ cmake                   libhidapi.0.14.0.dylib  libhidapi.0.dylib       libhidap
 ## hidapi sources
 ####################################################################
 
-$ mkdir ~/src/github.com/libusb
+$ mkdir -p ~/src/github.com/libusb
 $ cd ~/src/github.com/libusb
 $ git clone https://github.com/libusb/hidapi.git
 

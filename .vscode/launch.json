@@ -78,6 +78,82 @@
             }
 		},
 		{
+			"name": "bme68x",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/bme68x/bme68x",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+        },
+		{
+			"name": "bme68x_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/bme68x/bme68x_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
 			"name": "emc2101",
 			"type": "cppdbg",
 			"request": "launch",
@@ -197,6 +273,82 @@
 			"request": "launch",
 			"targetArchitecture": "arm",
 			"program": "${workspaceFolder}/tlv493d/tlv493d_i2c_hid",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "vcnl4020",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/vcnl4020/vcnl4020",
+			"args": [],
+			"stopAtEntry": true,
+			"externalConsole": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    },
+                    {
+                        "description": "Show debug values in hex",
+                        "text": "set output-radix 16",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "setupCommands": [
+                    {
+                        "text": "target-run",
+                        "description": "run target",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+		},
+		{
+			"name": "vcnl4020_i2c_hid",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/vcnl4020/vcnl4020_i2c_hid",
 			"args": [],
 			"stopAtEntry": true,
 			"externalConsole": false,
