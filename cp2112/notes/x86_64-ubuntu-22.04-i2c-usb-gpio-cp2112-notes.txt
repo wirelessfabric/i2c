@@ -66,6 +66,11 @@ tmpfs           1.3G  164k  1.3G   1% /run/user/1000
 ## connect CP2112 using an adb usb cable
 ##################################################################
 
+## QT blue   SDA  CP2112 SDA pin
+## QT yellow SCL  CP2112 SCL pin
+## QT red    +5V  CP2112 VCC pin
+## QT black  GND  CP2112 GND pin
+
 $ sudo dmesg | grep usb
 :::
 [48330.059676] usb 3-1.4: new full-speed USB device number 10 using xhci_hcd
