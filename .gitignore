@@ -99,6 +99,7 @@ bme68x/bme68x
 emc2101/emc2101
 lc709203f/lc709203f
 tlv493d/tlv493d
+vcnl4020/vcnl4020
 pimoroni/buttonshim
 pisugar3/pisugar3
 ssd1306/ssd1306
@@ -112,3 +113,4 @@ bme68x/bme68x_i2c_hid
 emc2101/emc2101_i2c_hid
 pimoroni/buttonshim_i2c_hid
 tlv493d/tlv493d_i2c_hid
+vcnl4020/vcnl4020_i2c_hid
