@@ -31,8 +31,22 @@
 #define VCNL4020_REG_INT_STATUS                 0x8E
 #define VCNL4020_REG_PROX_ADJUST                0x8F
 
-// VCNL4020 IC version
+// VCNL4020 product id
 #define VCNL4020_PRODUCT_ID                     0x21
+
+// VCNL4020 command codes
+#define VCNL4020_COMMAND_SELF_TIMED_ENABLE      (1 << 0) // read-write
+#define VCNL4020_COMMAND_PROXIMITY_ENABLE       (1 << 1) // read-write
+#define VCNL4020_COMMAND_AMBIENT_ENABLE         (1 << 2) // read-write
+#define VCNL4020_COMMAND_PROXIMITY_ON_DEMAND    (1 << 3) // read-write
+#define VCNL4020_COMMAND_AMBIENT_ON_DEMAND      (1 << 4) // read-write
+#define VCNL4020_PROXIMITY_READY                (1 << 5) // read-only
+#define VCNL4020_AMBIENT_READY                  (1 << 6) // read-only
+#define VCNL4020_CONFIG_LOCK                    (1 << 7) // read-only
+#define VCNL4020_ENABLE                         (VCNL4020_COMMAND_SELF_TIMED_ENABLE | \
+                                                 VCNL4020_COMMAND_PROXIMITY_ENABLE | \
+                                                 VCNL4020_COMMAND_AMBIENT_ENABLE)
+#define VCNL4020_DISABLE                        0
 
 // VCNL4020 proximity rate codes
 #define VCNL4020_PROXMITIY_RATE_125_Hz          0x06   // 125 measurements per second
@@ -74,8 +88,10 @@
 // VCNL4020 error codes
 #define VCNL4020_SUCCESS                        I2C_SUCCESS
 #define VCNL4020_INVALID_PRODUCT_ID             I2C_USER_ERROR(-1)
-#define VCNL4020_SET_PROXIMITY_RATE_ERROR       I2C_USER_ERROR(-2)
-#define VCNL4020_SET_IR_LED_CURRENT_ERROR       I2C_USER_ERROR(-3)
-#define VCNL4020_SET_AMBIENT_PARAMETERS_ERROR   I2C_USER_ERROR(-4)
+#define VCNL4020_DISABLE_ERROR                  I2C_USER_ERROR(-2)
+#define VCNL4020_SET_PROXIMITY_RATE_ERROR       I2C_USER_ERROR(-3)
+#define VCNL4020_SET_IR_LED_CURRENT_ERROR       I2C_USER_ERROR(-4)
+#define VCNL4020_SET_AMBIENT_PARAMETERS_ERROR   I2C_USER_ERROR(-5)
+#define VCNL4020_ENABLE_ERROR                   I2C_USER_ERROR(-6)
 
 #endif // VCNL4020_I2C_H

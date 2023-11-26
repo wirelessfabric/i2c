@@ -16,8 +16,16 @@
 
 static void loop(void* context) {
     while (true) {
-        uint16_t proximity = i2c_read_u16_be(context, VCNL4020_REG_PROXIMITY_RESULT_HIGH);
-        uint16_t ambient = i2c_read_u16_be(context, VCNL4020_REG_AMBIENT_RESULT_HIGH);
+        static uint16_t proximity = 0;
+        static uint16_t ambient = 0;
+
+        uint8_t status = i2c_read_u8(context, VCNL4020_REG_COMMAND);
+
+        if (status & VCNL4020_PROXIMITY_READY)
+            proximity = i2c_read_u16_be(context, VCNL4020_REG_PROXIMITY_RESULT_HIGH);
+
+        if (status & VCNL4020_AMBIENT_READY)
+            ambient = i2c_read_u16_be(context, VCNL4020_REG_AMBIENT_RESULT_HIGH);
 
         printf("Proximity: %d mm\n", proximity);
         printf("Ambient Light: %d lux\n", ambient);
@@ -37,6 +45,11 @@ static int setup(void* context) {
         return VCNL4020_INVALID_PRODUCT_ID;
     }
 
+    if (i2c_write_reg_u8(context, VCNL4020_REG_COMMAND, VCNL4020_DISABLE) < 0) {
+        printf("ERROR: setup() failed to disable sensor\n");
+        return VCNL4020_DISABLE_ERROR;
+    }
+
     uint8_t proximity_rate = VCNL4020_PROXMITIY_RATE_250_Hz;
     if (i2c_write_reg_u8(context, VCNL4020_REG_PROXIMITY_RATE, proximity_rate) < 0) {
         printf("ERROR: setup() failed to write proximity rate register\n");
@@ -53,6 +66,11 @@ static int setup(void* context) {
     if (i2c_write_reg_u8(context, VCNL4020_REG_AMBIENT_PARAMETERS, ambient_parameters) < 0) {
         printf("ERROR: setup() failed to write ambient parameters register\n");
         return VCNL4020_SET_AMBIENT_PARAMETERS_ERROR;
+    }
+
+    if (i2c_write_reg_u8(context, VCNL4020_REG_COMMAND, VCNL4020_ENABLE) < 0) {
+        printf("ERROR: setup() failed to enable sensor\n");
+        return VCNL4020_ENABLE_ERROR;
     }
 
     return VCNL4020_SUCCESS;
