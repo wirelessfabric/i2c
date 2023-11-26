@@ -237,7 +237,11 @@ static int setup(void* context) {
     int result;
 
     result = lc709203f_get_ic_version(context, &ic_version);
-    if (result < 0)
+    if (result == I2C_SMBUS_TRANSFER_ERROR) {
+        printf("ERROR: setup() no response from sensor\n");
+        return LC709203F_NO_RESPONSE;
+    }
+    else if (result < 0)
         return result;
     else if (ic_version != LC709203F_IC_VERSION) {
         printf("ERROR: setup() unexpected chip id 0x%02x\n", ic_version);

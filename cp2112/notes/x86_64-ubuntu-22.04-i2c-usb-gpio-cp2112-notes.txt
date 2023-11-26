@@ -118,7 +118,7 @@ KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
 $ sudo reboot
 
 ##################################################################
-## try CP2101 with various module
+## try CP2112 with various module
 ##################################################################
 
 ## i2c_read_reg product id
