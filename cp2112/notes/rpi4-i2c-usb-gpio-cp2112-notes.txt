@@ -31,6 +31,7 @@
 ## See: https://www.silabs.com/documents/public/release-notes/Mac_OSX_VCP_Driver_Release_Notes.txt
 ##
 ## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-cp2112.c
+## See: https://wiki.mlab.cz/doku.php?id=en:usbi2c
 ##
 ## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
 ##      https://www.youtube.com/watch?v=lANtyWHzZCo

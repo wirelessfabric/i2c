@@ -30,6 +30,9 @@
 ## See: https://www.silabs.com/documents/public/application-notes/Mac_OSX_VCP_Driver_10_6_Release_Notes.txt
 ## See: https://www.silabs.com/documents/public/release-notes/Mac_OSX_VCP_Driver_Release_Notes.txt
 ##
+## See: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/drivers/hid/hid-cp2112.c
+## See: https://wiki.mlab.cz/doku.php?id=en:usbi2c
+##
 ## See: I2C on any PC III - USB/I2C Bridges (MCP2221A and CP2112)
 ##      https://www.youtube.com/watch?v=lANtyWHzZCo
 ##
@@ -133,6 +136,8 @@ $ sudo i2cdetect -y -r 8
 $ sudo usermod -a -G i2c `whoami`
 $ sudo vi /etc/udev/rules.d/10-local_i2c_group.rules
 KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="10c4", MODE="0666"
+SUBSYSTEM=="usb_device", ATTRS{idVendor}=="10c4", MODE="0666"
 $ sudo reboot
 
 ##################################################################
